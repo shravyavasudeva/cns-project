@@ -1,0 +1,12 @@
+build/
+cmake-build-*/
+*.pcap
+*.tr
+*.xml
+*.csv
+*.png
+*.log
+.vscode/
+.idea/
+*~
+.DS_Store
