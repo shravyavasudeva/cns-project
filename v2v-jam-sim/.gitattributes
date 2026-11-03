@@ -1,0 +1,10 @@
+# Keep Linux line endings for everything that runs in WSL/Linux,
+# even if the repo is cloned on Windows.
+*.sh   text eol=lf
+*.py   text eol=lf
+*.cc   text eol=lf
+*.h    text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.png  binary
+*.gif  binary
