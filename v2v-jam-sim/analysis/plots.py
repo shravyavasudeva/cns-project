@@ -190,6 +190,31 @@ def rsu_effect(df, out):
     save(fig, out, "rsu_effect.png")
 
 
+def beacon_rate(df, out):
+    """L4 slows beacons while jammed. Does a slower rate starve the detector, and does it pay off?"""
+    b = df[df.preset == "beaconrate"]
+    if b.empty:
+        return
+    b = b.assign(beaconHzJam=pd.to_numeric(b.beaconHzJam, errors="coerce"))
+    scens = [s for s in SCEN_ORDER if s in set(b.scenario)]
+    colors = dict(zip(SCEN_ORDER, ["#2a78d6", "#eb6834", "#1baf7a"]))
+    panels = [("det_tpr", "detection rate (TPR)"), ("ontime_ratio", "on-time reachability")]
+    fig, axes = plt.subplots(1, len(panels), figsize=(4.4 * len(panels), 3.5))
+    for ax, (metric, ylabel) in zip(axes, panels):
+        for sc in scens:
+            g = b[b.scenario == sc].groupby("beaconHzJam")[metric].agg(["mean", ci95]).reset_index()
+            ax.errorbar(g.beaconHzJam, g["mean"], yerr=g["ci95"], color=colors[sc], lw=2,
+                        marker="o", ms=6, capsize=3, label=sc)
+        ax.set_xlabel("beacon rate while jammed (Hz), mitigation (d)")
+        ax.set_ylabel(ylabel)
+        ax.set_xticks(sorted(b.beaconHzJam.unique()))
+        ax.set_ylim(0, 1.05)
+    axes[0].set_title("Detector vs L4 beacon rate (constant jammer)")
+    axes[1].set_title("Alert delivery vs L4 beacon rate")
+    axes[-1].legend(loc="upper left", bbox_to_anchor=(1.0, 1.0))
+    save(fig, out, "beacon_rate.png")
+
+
 def detector(df, out):
     d = df[df.preset.isin(["confounders", "main"]) & (df.mitigation == 0)]
     if d.empty:
@@ -239,6 +264,7 @@ def main():
     routing(df, out)
     density(df, out)
     rsu_effect(df, out)
+    beacon_rate(df, out)
     detector(df, out)
 
 

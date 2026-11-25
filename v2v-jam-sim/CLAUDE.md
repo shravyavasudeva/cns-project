@@ -11,7 +11,8 @@ ECE 6612 course project, *Cross-Layer Resilience for Jammed V2V Safety Communica
 - Build: `cd ~/ns-3.47 && ./ns3 build`. Run: `./ns3 run "v2v-jam --flag=value ..."`. Show flags: `./ns3 run "v2v-jam --PrintHelp"`.
 - Configure (once): `./ns3 configure --build-profile=optimized --disable-werror --enable-modules="core;network;mobility;propagation;spectrum;wifi;netanim"`. Use `--build-profile=debug` when chasing crashes (enables NS_ASSERT / NS_LOG).
 - Python analysis: `pip install -r requirements.txt` (pandas, numpy, matplotlib, pillow).
-- Builds and runs cleanly on **ns-3.47** (WSL2, g++ 15.2; full batch run Nov 24, 2026, results in `results/`) and on **ns-3.40** (macOS, Apple clang 14). When fixing build errors, check the real signature in `~/ns-3.47/src/<module>/model/*.h` instead of guessing, and make the smallest fix.
+- Builds and runs cleanly on **ns-3.47** (WSL2, g++ 15.2; full batch re-run Nov 25, 2026 on patched ns-3.47, results in `results/`) and on **ns-3.40** (macOS, Apple clang 14). When fixing build errors, check the real signature in `~/ns-3.47/src/<module>/model/*.h` instead of guessing, and make the smallest fix.
+- **ns-3.47 needs our patch** `patches/ns-3.47-cca-idle-during-rx.patch` (applied by `scripts/setup_ns3.sh`, or run `bash scripts/apply_ns3_patch.sh [ns3-dir]`). Without it, saturated channels (e.g. `--confounder=congestion`) can abort in `InterferenceHelper::CalculateNoiseInterferenceW` (`it == niIt->second.end()`): a weak signal arriving during preamble/header reception made `PhyEntity::SwitchMaybeToCcaBusy()` set the PHY to IDLE mid-frame, so a second reception started. A debug build shows it earlier as `NS_ASSERT !m_wifiPhy->m_currentEvent` (phy-entity.cc:493). All results in `results/` were produced with the patch.
 - ns-3.40 needs a one-line patch to run 10 MHz spectrum PHYs (`OfdmPhy::GetMeasurementChannelWidth` must return `min(channelWidth, 20)` instead of `20`, see README Troubleshooting). ns-3.47 already has it.
 - Detector design notes from testing:
   - Congestion and jamming are separated by *CCA_BUSY-only* time (non-frame energy) plus an elevated noise floor.
@@ -35,6 +36,7 @@ See **README.md → "Test results so far"** and **"Next steps"**. The README is 
 | `safety-app.h/.cc` | `SafetyApp` (ns-3 Application): beacons, alerts, L4 queue (`Submit`/`ServiceQueue`), receive path, relay/RSU forwarding, backhaul |
 | `stats.h/.cc` | per-second beacon counters → beacons.csv, pdr_by_jamdist.csv |
 | `run_batch.py` | presets → parallel runs into `results/<preset>/<run-name>/`, skips finished runs |
+| `patches/`, `scripts/apply_ns3_patch.sh` | our ns-3.47 bug fix (see `patches/README.md`) and an idempotent script that applies it |
 | `analysis/metrics.py` | run folders → `summary_runs.csv`, `summary_grouped.csv` (metric definitions in its docstring) |
 | `analysis/plots.py` | summary → `results/figures/*.png` |
 | `analysis/animate.py` | one run (with `--posLog=1`) → GIF |

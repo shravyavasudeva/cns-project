@@ -4,7 +4,7 @@
 
 This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.11p while an RF jammer attacks the channel. It asks one question: **does adding Layer 3 rerouting (via an RSU or relay vehicle) and Layer 4 deadline/priority handling on top of PHY/MAC jamming detection get emergency alerts to nearby vehicles in time, and how does the answer change between a highway, a local road and an urban intersection?**
 
-> **Status (Nov 24, 2026):** built and run on **ns-3.47** (WSL2, Ubuntu, g++ 15.2) with no code changes. The **full experiment batch** (`--preset all`, 360 runs + smoke + demo) is done. Results, figures and a detailed explanation are in **[`results/README.md`](results/README.md)**. Earlier testing was on ns-3.40 (macOS).
+> **Status (Nov 25, 2026):** built and run on **ns-3.47** (WSL2, Ubuntu, g++ 15.2) **with our one-line ns-3 bug fix** ([`patches/`](patches/README.md): run `bash scripts/apply_ns3_patch.sh` once). The **full experiment batch** (`--preset all`, 387 runs + smoke + demo) completed with no failures. Results, figures and a detailed explanation are in **[`results/README.md`](results/README.md)**. Earlier testing was on ns-3.40 (macOS).
 >
 > **ns-3.40 only:** 3.40 has a bug that crashes any 10 MHz (802.11p) spectrum PHY (`interference-helper.cc line 337`). ns-3.47 fixed it. If you must use 3.40, apply the one-line fix described in [Troubleshooting](#troubleshooting).
 
@@ -12,36 +12,37 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 
 ## Test results so far
 
-**Full batch on ns-3.47** (5 seeds for `main`, 3 for the other presets). The complete analysis is in [`results/README.md`](results/README.md).
+**Full batch on patched ns-3.47, Nov 25** (5 seeds for `main`, 3 for the other presets). The complete analysis is in [`results/README.md`](results/README.md).
 
 | Check | Result |
 |---|---|
-| Build on ns-3.47 | Clean, no code changes needed |
+| Build on ns-3.47 | Clean. ns-3.47 itself needed a one-line bug fix (`patches/`); 387/387 runs complete |
 | Jammer sanity (`sanity` preset) | Beacon PDR falls 0.997 → 0.506 as jammer power rises from −10 to 30 dBm. Near the jammer (< 50 m) PDR is 0.08; beyond about 600 m it is unaffected. ✅ |
 | Detector, constant jammer | TPR 0.97 / 0.89 / 0.98 (highway / local / urban), FPR ≤ 3.4%, delay 330–520 ms |
 | Detector, reactive jammer | TPR 0.23–0.40, delay 3.6–5.1 s: the stealthier attack is hard to detect |
 | Detector, confounders | False alarms ≤ 4.7% (highway congestion); correctly labelled CONGESTED / WEAK |
 | On-time alert reachability, constant jammer, mitigation 0 → 3 | Highway 0.48 → **0.57**, local 0.50 → **0.53**, urban 0.28 → **0.32**. Better on every seed (paired) |
 | Same, reactive jammer | Highway 0.55 → 0.58, local 0.51 → 0.53, urban 0.34 → 0.40 |
+| L4 beacon rate while jammed (`beaconrate`) | 2 Hz starves the detector on sparse roads. **5 Hz** restores urban TPR (0.74 → 0.97) at no cost. **10 Hz** restores local (0.49 → 0.93) but costs the highway (on-time 0.57 → 0.50, latency 3 → 18 ms) |
 | Layer 3 | NO_RELAY: local **80%**, highway 39%, urban 3%. L3 helps most in urban (RSU at the intersection), nothing on the local road |
 | Layer 4 | Stale alerts accepted → **0%** everywhere. Jammed highway alert latency 20 ms → **3 ms** (p95 45 → 9 ms) |
 | Density | Highway: unmitigated 0.61 → 0.40 from 30 → 120 vehicles; full mitigation holds about 0.60 |
-| Runtime | 5–60 s per run on a laptop; full batch about 2 h with 2 parallel jobs |
+| Runtime | 1–120 s per run on a laptop; full batch about 70 min with 2 parallel jobs |
 
 **Things to watch / discuss in the report:**
 - **Mitigation gains are modest.** Vehicles deep inside the jammer's range cannot decode anything. Rerouting only helps near the edge of the jammed area.
-- **L4 slows down detection.** At mitigation 3, L4 lowers the beacon rate to 2 Hz while jamming. TPR drops 0.89 → 0.51 (local) and 0.98 → 0.69 (urban). Test `--beaconHzJam=5` or `10`.
+- **L4 slows down detection.** At mitigation 3, L4 lowers the beacon rate to 2 Hz while jamming. TPR drops 0.89 → 0.51 (local) and 0.98 → 0.69 (urban). The `beaconrate` preset shows 5 Hz fixes urban for free; the local road needs 10 Hz, which hurts the highway (`results/README.md` §5.8). **Team decision:** default rate, or density-adaptive.
 - **Urban baseline is 0.70 without a jammer** (path-loss exponent 3.0 vs a fixed 200 m target radius). Compare urban jammed results against 0.70.
-- **Highway without an RSU never finds a relay vehicle** (NO_RELAY 100% in the `rsu` preset). Worth checking the relay filter.
-- **One run crashes inside ns-3.47** (`confounders/highway_jam-none_conf-congestion_m0_s2`, interference-helper assertion, deterministic). See `results/README.md` §7.1.
+- **Highway without an RSU never finds a relay vehicle** (NO_RELAY 100% in the `rsu` preset). By design, `relay.cc` rejects neighbours that are themselves jammed, and alert sources are within 250 m of a jammer that reaches about 600 m, so every neighbour a source can hear is jammed. Only the RSU's wired backhaul escapes. **Team decision:** keep it (a legitimate finding), or allow jammed neighbours closer to the zone edge (multi-hop escape).
+- **ns-3.47 bug fixed.** The Nov 24 batch had one run abort inside ns-3 (`interference-helper.cc:465`). Root cause and one-line fix in [`patches/README.md`](patches/README.md). It changes results by ≤ 0.03 per run.
 - **Two code changes from testing are already included:**
   - The detector separates jamming from congestion by *CCA_BUSY-only* time (non-frame energy) plus an elevated noise floor.
   - Beacons advertise only a node's *own* jamming detection. Earlier, suspicion spread node to node and caused network-wide false alarms.
 
 ## Next steps
 
-1. ~~Build on ns-3.47~~ ✅ · ~~Run `sanity`~~ ✅ · ~~Run `--preset all`~~ ✅ · ~~Make the figures~~ ✅ (all in `results/`)
-2. **Detector vs L4 trade-off:** rerun mitigation 3 with `--beaconHzJam=5` / `10`.
+1. ~~Build on ns-3.47~~ ✅ · ~~Run `sanity`~~ ✅ · ~~Run `--preset all`~~ ✅ · ~~Make the figures~~ ✅ · ~~Fix the ns-3.47 crash~~ ✅ (all in `results/`)
+2. ~~Detector vs L4 trade-off~~ ✅ (`beaconrate` preset). Decide the jammed beacon rate (2 / 5 Hz / density-adaptive).
 3. **Calibrate the detector** for reactive jammers (§10), then re-run the presets if the thresholds change.
 4. Check the highway relay selection without an RSU, and decide on the urban target radius.
 5. Write the report sections using `results/README.md` and `results/figures/`.
@@ -79,7 +80,7 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 | L4 handling | Priority queue (EMERGENCY before ROUTINE). Messages are released to the radio only when it is idle. Stale messages are dropped at the sender, relay and receiver. Beacon rate drops to 2 Hz while jamming is suspected |
 | Ground truth | Every 0.1 s, each node is labelled "jammed" if the jammer power there is ≥ −92 dBm. Used to score the detector (TPR, FPR, delay) |
 | Metrics | Reachability, deadline-miss ratio, stale-accept ratio, latency/p95/jitter, NO_RELAY rate, relay success, route recovery time, route breaks, path switches, routing overhead, beacon PDR, goodput, connection interruption time, detector accuracy |
-| Tooling | One program with flags, a batch runner with 6 presets (360 runs), metrics and plot scripts, a GIF demo animation, and an optional NetAnim trace |
+| Tooling | One program with flags, a batch runner with 7 presets (388 runs incl. smoke), metrics and plot scripts, a GIF demo animation, and an optional NetAnim trace |
 
 ### The four mitigation configurations (`--mitigation`)
 Each level adds to the one before it, so the results show what each layer contributes:
@@ -112,8 +113,10 @@ v2v-jam-sim/                  (folder inside the cns-project repo)
 ├── requirements.txt          ← Python packages for analysis
 ├── run_batch.py              ← runs all experiments (presets)
 ├── scripts/
-│   ├── setup_ns3.sh          ← one-time: install ns-3.47, copy code, build, smoke test
+│   ├── setup_ns3.sh          ← one-time: install ns-3.47, copy code, patch, build, smoke test
+│   ├── apply_ns3_patch.sh    ← applies patches/ to an existing ns-3.47 (safe to re-run)
 │   └── sync_code.sh          ← after every code change: copy code into ns-3 and rebuild
+├── patches/                  ← our ns-3.47 bug fix + README explaining it (REQUIRED)
 ├── scratch/v2v-jam/          ← THE SIMULATION (C++), copied into ns-3.47/scratch/v2v-jam/
 │   ├── v2v-jam.cc            ← main(): flags, nodes, WiFi, wiring, alert scheduler, ground truth
 │   ├── common.h/.cc          ← Params (all settings), V2vHeader (packet header), EventLog, node registry
@@ -159,6 +162,7 @@ cd v2v-jam-sim                         # all commands below run from here
 > **Already have ns-3.47 installed?** Skip the script. Copy our folder into its `scratch/` and build:
 > ```bash
 > cp -r ~/cns-project/v2v-jam-sim/scratch/v2v-jam <your-ns-3.47-folder>/scratch/
+> bash ~/cns-project/v2v-jam-sim/scripts/apply_ns3_patch.sh <your-ns-3.47-folder> --no-build   # required bug fix
 > cd <your-ns-3.47-folder> && ./ns3 configure --build-profile=optimized --disable-werror && ./ns3 build
 > ```
 > (With `ns-allinone-3.47`, the folder is `ns-allinone-3.47/ns-3.47`.) Then pass that folder to `run_batch.py --ns3 ...` and `scripts/sync_code.sh ...`.
@@ -169,7 +173,7 @@ bash scripts/setup_ns3.sh
 This script:
 1. installs `g++ cmake ninja python3 …`;
 2. downloads **ns-3.47** to `~/ns-3.47`;
-3. copies `scratch/v2v-jam` into `~/ns-3.47/scratch/v2v-jam`;
+3. copies `scratch/v2v-jam` into `~/ns-3.47/scratch/v2v-jam` and applies our **ns-3.47 bug-fix patch** (see below);
 4. configures an **optimized** build with only the needed modules (`core network mobility propagation spectrum wifi netanim`) and builds it;
 5. runs a 15-second smoke test that writes into `~/ns-3.47/results/smoke/`.
 
@@ -179,11 +183,14 @@ cd ~
 wget https://gitlab.com/nsnam/ns-3-dev/-/archive/ns-3.47/ns-3-dev-ns-3.47.tar.gz
 tar xzf ns-3-dev-ns-3.47.tar.gz && mv ns-3-dev-ns-3.47 ns-3.47
 cp -r ~/cns-project/v2v-jam-sim/scratch/v2v-jam ~/ns-3.47/scratch/
+bash ~/cns-project/v2v-jam-sim/scripts/apply_ns3_patch.sh ~/ns-3.47 --no-build
 cd ~/ns-3.47
 ./ns3 configure --build-profile=optimized --disable-werror \
      --enable-modules="core;network;mobility;propagation;spectrum;wifi;netanim"
 ./ns3 build
 ```
+
+> ⚠️ **ns-3.47 needs our one-line patch** (`patches/ns-3.47-cca-idle-during-rx.patch`). Without it, runs on a saturated channel can abort with `cond="it == niIt->second.end()" ... interference-helper.cc, line=465`. **Already installed ns-3.47 before Nov 25, 2026?** Run `bash scripts/apply_ns3_patch.sh` once (it rebuilds). Details: [`patches/README.md`](patches/README.md).
 
 ### 3.4 Python packages for the analysis
 ```bash
@@ -244,7 +251,7 @@ cd ~/cns-project/v2v-jam-sim
 python3 run_batch.py --ns3 ~/ns-3.47 --preset smoke            # 1 run, checks everything works
 python3 run_batch.py --ns3 ~/ns-3.47 --preset sanity --jobs 4  # do this FIRST (see below)
 python3 run_batch.py --ns3 ~/ns-3.47 --preset main   --jobs 4
-python3 run_batch.py --ns3 ~/ns-3.47 --preset all    --jobs 4  # everything (360 runs)
+python3 run_batch.py --ns3 ~/ns-3.47 --preset all    --jobs 4  # everything (387 runs)
 python3 run_batch.py --ns3 ~/ns-3.47 --preset main --dry-run   # only print the commands
 ```
 
@@ -256,6 +263,7 @@ python3 run_batch.py --ns3 ~/ns-3.47 --preset main --dry-run   # only print the 
 | `density` | vehicles (highway 30/60/120, local 6/12/24, urban 20/40/80) × mitigation × 3 seeds, constant jammer | 108 |
 | `confounders` | {congestion, weak, interference} × {highway, local} × mitigation {0,3} × 3 seeds, no jammer | 36 |
 | `rsu` | RSU {0,1} × {highway, local} × mitigation {2,3} × 3 seeds, constant jammer | 24 |
+| `beaconrate` | L4 beacon rate while jammed `--beaconHzJam` {2,5,10} × scenario × 3 seeds, constant jammer, mitigation 3 | 27 |
 
 - Results go to `results/<preset>/<run-name>/`.
 - **Finished runs are skipped**, so you can stop with Ctrl+C and restart later.
@@ -296,7 +304,7 @@ python3 analysis/plots.py   --results results    # → results/figures/*.png, de
 | share_normal/congested/weak/jammed | how the detector classified the channel (shows confounder confusion) |
 
 ### Figures produced
-`sanity_pdr_vs_power`, `sanity_pdr_vs_distance`, `ontime_by_config`, `deadline_miss_by_config`, `latency_by_config`, `beacon_pdr_by_config`, `routing_by_scenario`, `ontime_vs_density`, `rsu_effect`, `detector_states`, plus `detector_accuracy.csv`.
+`sanity_pdr_vs_power`, `sanity_pdr_vs_distance`, `ontime_by_config`, `deadline_miss_by_config`, `latency_by_config`, `beacon_pdr_by_config`, `routing_by_scenario`, `ontime_vs_density`, `rsu_effect`, `beacon_rate`, `detector_states`, plus `detector_accuracy.csv`.
 
 ---
 
@@ -497,6 +505,7 @@ The default thresholds are reasonable starting points, not tuned values. Tuning 
 | Error about `NetAnim` / `netanim-module.h` | The netanim module wasn't enabled. Re-run the `./ns3 configure` line from §3.3 (it includes `netanim`) |
 | Attribute error at start (e.g. `CcaSensitivity`, `ChannelSettings`) | Wrong ns-3 version. Use 3.47 |
 | **ns-3.40 only:** run aborts at ~0.1 s with `cond="niIt == m_niChanges.end()" ... interference-helper.cc, line=337` | Bug in ns-3.40 with 10 MHz channels (fixed in 3.47). In `src/wifi/model/non-ht/ofdm-phy.cc`, function `OfdmPhy::GetMeasurementChannelWidth`, change `return 20;` to `return std::min<uint16_t>(m_wifiPhy->GetChannelWidth(), 20);`, then `./ns3 build` |
+| Run aborts with `cond="it == niIt->second.end()" ... interference-helper.cc, line=465` (debug build: `cond="!m_wifiPhy->m_currentEvent" ... phy-entity.cc, line=493`) | ns-3.47 bug on saturated channels. Apply our patch: `bash scripts/apply_ns3_patch.sh`. See [`patches/README.md`](patches/README.md) |
 | Build killed / very slow | WSL ran out of RAM. Build with `./ns3 build -j2`, and/or create `C:\Users\<you>\.wslconfig` with `[wsl2]` and `memory=8GB` |
 | Everything is slow | Keep the project and ns-3 in `~/`, not `/mnt/c/` |
 | `run_batch.py` can't find the program | Check `ls ~/ns-3.47/build/scratch/v2v-jam/`. The binary is named `ns3.47-v2v-jam-optimized` (or `-default`) |

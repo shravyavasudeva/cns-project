@@ -21,6 +21,7 @@
   "jamStop": 15,
   "beaconHz": 10,
   "beaconBytes": 200,
+  "beaconHzJam": 2,
   "alertStart": 11,
   "alertInterval": 1,
   "alertRadius": 200,

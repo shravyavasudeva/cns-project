@@ -40,7 +40,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-GROUP_KEYS = ["preset", "scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower"]
+GROUP_KEYS = ["preset", "scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower", "beaconHzJam"]
 
 
 def parse_extra(s):
@@ -71,6 +71,8 @@ def run_metrics(run_dir):
     deadline = prm["deadlineMs"]
     m = {k: prm.get(k) for k in ["scenario", "jammer", "confounder", "mitigation", "vehicles",
                                   "rsu", "jamPower", "seed", "speed", "simTime"]}
+    # beaconHzJam was added to params.json later; older runs used the default of 2 Hz
+    m["beaconHzJam"] = prm.get("beaconHzJam", 2)
     m["run_dir"] = run_dir
 
     # ------------------------------- alerts -------------------------------

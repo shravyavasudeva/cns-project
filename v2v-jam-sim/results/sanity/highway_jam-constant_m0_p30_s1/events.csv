@@ -492,7 +492,7 @@ time_ms,event,node,seq,extra
 29109.221,ALERT_TARGET,56,18,src=29;dist=155.2
 29109.221,ALERT_GEN,29,18,x=1144.56;y=-10;jam_suspected=1;det_state=JAMMED
 29109.221,TX,29,18,path=DIRECT;hop=0;dst=bcast;bytes=108
-29115.770,RX,14,18,lat_ms=6.5487;path=DIRECT;hop=0;from=29;stale=0
+29145.300,RX,14,18,lat_ms=36.079;path=DIRECT;hop=0;from=29;stale=0
 29500.000,GT_OFF,44,-1,jam_dbm=-92.03
 29500.000,GT_OFF,59,-1,jam_dbm=-92.02
 29700.000,GT_OFF,2,-1,jam_dbm=-92.01

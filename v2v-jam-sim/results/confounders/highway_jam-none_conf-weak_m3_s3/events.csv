@@ -14,7 +14,7 @@ time_ms,event,node,seq,extra
 1762.685,DET_STATE,55,-1,from=WEAK;to=NORMAL;busy=0.00806;cca=0.00403;pdr=-1;err=0;noise=-97;rssi=-86.2;linkjam=0
 1770.708,DET_STATE,59,-1,from=WEAK;to=NORMAL;busy=0;cca=0;pdr=0.5;err=0;noise=-97;rssi=-80.4;linkjam=2
 1784.793,DET_STATE,46,-1,from=NORMAL;to=WEAK;busy=0.00803;cca=0.00402;pdr=0.438;err=0;noise=-96.6;rssi=-80.1;linkjam=2
-1803.589,DET_STATE,38,-1,from=NORMAL;to=WEAK;busy=0.024;cca=0.008;pdr=0.424;err=0;noise=-96.9;rssi=-85.3;linkjam=2
+1803.589,DET_STATE,38,-1,from=NORMAL;to=WEAK;busy=0.028;cca=0.012;pdr=0.424;err=0;noise=-96.9;rssi=-85.3;linkjam=2
 1858.615,DET_STATE,23,-1,from=WEAK;to=NORMAL;busy=0.02;cca=0.008;pdr=0.5;err=0;noise=-97;rssi=-85.2;linkjam=1
 1870.708,DET_STATE,59,-1,from=NORMAL;to=WEAK;busy=0.004;cca=0;pdr=0.375;err=0;noise=-97;rssi=-75.7;linkjam=2
 1875.383,DET_STATE,2,-1,from=NORMAL;to=WEAK;busy=0.00803;cca=0;pdr=0.452;err=0;noise=-97;rssi=-87.5;linkjam=3
@@ -1569,11 +1569,11 @@ time_ms,event,node,seq,extra
 27096.196,TX,21,16,path=DIRECT;hop=0;dst=bcast;bytes=108
 27149.958,DET_STATE,47,-1,from=NORMAL;to=WEAK;busy=0;cca=0;pdr=0.467;err=0;noise=-96.9;rssi=-84.4;linkjam=2
 27166.463,DET_STATE,3,-1,from=NORMAL;to=WEAK;busy=0.00402;cca=0.00402;pdr=0.2;err=0;noise=-97;rssi=-83.5;linkjam=3
-27236.741,DET_STATE,61,-1,from=WEAK;to=NORMAL;busy=0.02;cca=0.012;pdr=0.544;err=0;noise=-97;rssi=-84;linkjam=2
+27236.741,DET_STATE,61,-1,from=WEAK;to=NORMAL;busy=0.024;cca=0.016;pdr=0.544;err=0;noise=-97;rssi=-84;linkjam=2
 27249.958,DET_STATE,47,-1,from=WEAK;to=NORMAL;busy=0.00402;cca=0.00402;pdr=1;err=0;noise=-96.9;rssi=-83.4;linkjam=0
 27266.463,DET_STATE,3,-1,from=WEAK;to=NORMAL;busy=0.00403;cca=0.00403;pdr=0.571;err=0;noise=-97;rssi=-82.7;linkjam=0
 27291.753,DET_STATE,60,-1,from=WEAK;to=NORMAL;busy=0.004;cca=0.004;pdr=0.5;err=0;noise=-97;rssi=-77.5;linkjam=2
-27436.741,DET_STATE,61,-1,from=NORMAL;to=WEAK;busy=0.0161;cca=0.00803;pdr=0.391;err=0;noise=-97;rssi=-83.5;linkjam=2
+27436.741,DET_STATE,61,-1,from=NORMAL;to=WEAK;busy=0.0201;cca=0.012;pdr=0.391;err=0;noise=-97;rssi=-83.5;linkjam=2
 27491.753,DET_STATE,60,-1,from=NORMAL;to=WEAK;busy=0.008;cca=0.004;pdr=0.45;err=0;noise=-97;rssi=-73.9;linkjam=2
 27499.022,DET_STATE,43,-1,from=NORMAL;to=WEAK;busy=0.012;cca=0.008;pdr=0.4;err=0;noise=-97;rssi=-79.3;linkjam=2
 27519.996,DET_STATE,51,-1,from=WEAK;to=NORMAL;busy=0.00402;cca=0;pdr=0.545;err=0;noise=-96.9;rssi=-77.8;linkjam=1

@@ -235,10 +235,10 @@ time_ms,event,node,seq,extra
 11497.834,DET_STATE,6,-1,from=WEAK;to=NORMAL;busy=0.157;cca=0.0482;pdr=0.782;err=0.0698;noise=-95.7;rssi=-71.1;linkjam=0
 11605.156,DET_STATE,107,-1,from=NORMAL;to=JAMMED;busy=0.58;cca=0.532;pdr=0.6;err=0.153;noise=-90.2;rssi=-76.6;linkjam=6
 11605.156,JAM_DETECTED,107,-1,from=NORMAL;to=JAMMED;busy=0.58;cca=0.532;pdr=0.6;err=0.153;noise=-90.2;rssi=-76.6;linkjam=6
-11698.277,DET_STATE,56,-1,from=NORMAL;to=WEAK;busy=0.0964;cca=0.0402;pdr=0.3;err=0.0794;noise=-95.8;rssi=-74;linkjam=1
+11698.277,DET_STATE,56,-1,from=NORMAL;to=WEAK;busy=0.1;cca=0.0442;pdr=0.3;err=0.0794;noise=-95.8;rssi=-74;linkjam=1
 11789.427,DET_STATE,84,-1,from=NORMAL;to=JAMMED;busy=0.554;cca=0.49;pdr=0.752;err=0.109;noise=-90.4;rssi=-74.7;linkjam=0
 11789.427,JAM_DETECTED,84,-1,from=NORMAL;to=JAMMED;busy=0.554;cca=0.49;pdr=0.752;err=0.109;noise=-90.4;rssi=-74.7;linkjam=0
-11798.277,DET_STATE,56,-1,from=WEAK;to=NORMAL;busy=0.0843;cca=0.0361;pdr=0.742;err=0.088;noise=-95.8;rssi=-72.8;linkjam=1
+11798.277,DET_STATE,56,-1,from=WEAK;to=NORMAL;busy=0.0884;cca=0.0402;pdr=0.742;err=0.088;noise=-95.8;rssi=-72.8;linkjam=1
 11963.766,DET_STATE,22,-1,from=JAMMED;to=NORMAL;busy=0.232;cca=0.18;pdr=0.825;err=0.104;noise=-90.4;rssi=-74.6;linkjam=1
 12016.356,ALERT_TARGET,22,1,src=44;dist=194.3
 12016.356,ALERT_TARGET,23,1,src=44;dist=27.72
@@ -1011,7 +1011,7 @@ time_ms,event,node,seq,extra
 31147.101,RX,118,20,lat_ms=97.201;path=DIRECT;hop=0;from=18;stale=0
 31147.101,RX,74,20,lat_ms=97.201;path=DIRECT;hop=0;from=18;stale=0
 31218.007,DET_STATE,51,-1,from=JAMMED;to=NORMAL;busy=0.248;cca=0.2;pdr=0.853;err=0.132;noise=-90.8;rssi=-75.4;linkjam=0
-31330.758,DET_STATE,44,-1,from=JAMMED;to=NORMAL;busy=0.262;cca=0.23;pdr=1;err=0.211;noise=-91.2;rssi=-77.4;linkjam=0
+31330.758,DET_STATE,44,-1,from=JAMMED;to=NORMAL;busy=0.266;cca=0.234;pdr=1;err=0.211;noise=-91.2;rssi=-77.4;linkjam=0
 31600.000,GT_OFF,21,-1,jam_dbm=-92.06
 31600.648,DET_STATE,103,-1,from=NORMAL;to=WEAK;busy=0.112;cca=0.008;pdr=0.2;err=0.0367;noise=-95.7;rssi=-58.3;linkjam=6
 31611.658,DET_STATE,58,-1,from=NORMAL;to=WEAK;busy=0.18;cca=0.028;pdr=0.2;err=0.0132;noise=-95.8;rssi=-58.8;linkjam=2
@@ -1041,7 +1041,7 @@ time_ms,event,node,seq,extra
 32200.000,GT_OFF,28,-1,jam_dbm=-92.05
 32200.000,GT_OFF,104,-1,jam_dbm=-92.02
 32458.288,DET_STATE,119,-1,from=NORMAL;to=WEAK;busy=0.169;cca=0.0201;pdr=0.2;err=0.0135;noise=-95.8;rssi=-60.1;linkjam=2
-32558.288,DET_STATE,119,-1,from=WEAK;to=NORMAL;busy=0.165;cca=0.0201;pdr=0.646;err=0.0133;noise=-95.8;rssi=-58.4;linkjam=3
+32558.288,DET_STATE,119,-1,from=WEAK;to=NORMAL;busy=0.161;cca=0.0201;pdr=0.646;err=0.0133;noise=-95.8;rssi=-58.4;linkjam=3
 33030.255,ALERT_TARGET,5,22,src=113;dist=122.2
 33030.255,ALERT_TARGET,11,22,src=113;dist=180.6
 33030.255,ALERT_TARGET,32,22,src=113;dist=114.2
@@ -1085,7 +1085,7 @@ time_ms,event,node,seq,extra
 34210.534,DET_STATE,104,-1,from=JAMMED;to=NORMAL;busy=0.291;cca=0.267;pdr=1;err=0.167;noise=-91.3;rssi=-75.3;linkjam=0
 34267.027,DET_STATE,72,-1,from=JAMMED;to=NORMAL;busy=0.241;cca=0.229;pdr=1;err=0.182;noise=-91.5;rssi=-75.3;linkjam=0
 34900.000,GT_OFF,107,-1,jam_dbm=-92.05
-35139.231,DET_STATE,11,-1,from=JAMMED;to=NORMAL;busy=0.257;cca=0.213;pdr=0.929;err=0.144;noise=-91.4;rssi=-74.5;linkjam=0
+35139.231,DET_STATE,11,-1,from=JAMMED;to=NORMAL;busy=0.261;cca=0.217;pdr=0.929;err=0.144;noise=-91.4;rssi=-74.5;linkjam=0
 35190.311,ALERT_TARGET,18,24,src=36;dist=36.07
 35190.311,ALERT_TARGET,32,24,src=36;dist=123.2
 35190.311,ALERT_TARGET,66,24,src=36;dist=90.26
@@ -1104,7 +1104,7 @@ time_ms,event,node,seq,extra
 35292.298,DET_STATE,23,-1,from=WEAK;to=NORMAL;busy=0.173;cca=0.0403;pdr=0.845;err=0.0172;noise=-95.8;rssi=-57.2;linkjam=0
 35568.834,DET_STATE,42,-1,from=JAMMED;to=NORMAL;busy=0.242;cca=0.23;pdr=0.92;err=0.271;noise=-91.7;rssi=-77.4;linkjam=0
 35600.000,GT_OFF,81,-1,jam_dbm=-92.04
-35652.546,DET_STATE,62,-1,from=NORMAL;to=WEAK;busy=0.206;cca=0.0282;pdr=0.2;err=0.00429;noise=-95.8;rssi=-59.5;linkjam=1
+35652.546,DET_STATE,62,-1,from=NORMAL;to=WEAK;busy=0.206;cca=0.0282;pdr=0.2;err=0;noise=-95.8;rssi=-59.6;linkjam=1
 35752.546,DET_STATE,62,-1,from=WEAK;to=NORMAL;busy=0.198;cca=0.0282;pdr=0.8;err=0.00429;noise=-95.8;rssi=-57;linkjam=1
 36144.469,ALERT_TARGET,18,25,src=86;dist=8.628
 36144.469,ALERT_TARGET,32,25,src=86;dist=161.5
@@ -1118,10 +1118,10 @@ time_ms,event,node,seq,extra
 36155.313,RX,36,25,lat_ms=10.844;path=DIRECT;hop=0;from=86;stale=0
 36155.313,RX,74,25,lat_ms=10.844;path=DIRECT;hop=0;from=86;stale=0
 36155.313,RX,84,25,lat_ms=10.844;path=DIRECT;hop=0;from=86;stale=0
-36251.840,DET_STATE,26,-1,from=NORMAL;to=WEAK;busy=0.165;cca=0.0241;pdr=0.2;err=0.0175;noise=-95.8;rssi=-58.8;linkjam=3
-36346.201,DET_STATE,67,-1,from=NORMAL;to=WEAK;busy=0.173;cca=0.0323;pdr=0.2;err=0.0262;noise=-95.8;rssi=-56.7;linkjam=3
-36351.840,DET_STATE,26,-1,from=WEAK;to=NORMAL;busy=0.185;cca=0.0402;pdr=0.701;err=0.0216;noise=-95.6;rssi=-55.9;linkjam=1
-36446.201,DET_STATE,67,-1,from=WEAK;to=NORMAL;busy=0.177;cca=0.0323;pdr=0.669;err=0.026;noise=-95.8;rssi=-53.7;linkjam=1
+36251.840,DET_STATE,26,-1,from=NORMAL;to=WEAK;busy=0.165;cca=0.0241;pdr=0.2;err=0.0132;noise=-95.8;rssi=-59;linkjam=3
+36346.201,DET_STATE,67,-1,from=NORMAL;to=WEAK;busy=0.173;cca=0.0323;pdr=0.2;err=0.0176;noise=-95.8;rssi=-57;linkjam=3
+36351.840,DET_STATE,26,-1,from=WEAK;to=NORMAL;busy=0.185;cca=0.0402;pdr=0.701;err=0.0174;noise=-95.6;rssi=-56;linkjam=1
+36446.201,DET_STATE,67,-1,from=WEAK;to=NORMAL;busy=0.177;cca=0.0323;pdr=0.669;err=0.0175;noise=-95.8;rssi=-54;linkjam=1
 36705.156,DET_STATE,107,-1,from=JAMMED;to=NORMAL;busy=0.252;cca=0.22;pdr=0.929;err=0.0412;noise=-91.4;rssi=-74.6;linkjam=0
 36800.000,GT_OFF,77,-1,jam_dbm=-92.09
 36905.616,DET_STATE,115,-1,from=NORMAL;to=WEAK;busy=0.196;cca=0.044;pdr=0.26;err=0.013;noise=-95.8;rssi=-55.2;linkjam=5

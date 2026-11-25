@@ -578,7 +578,7 @@ time_ms,event,node,seq,extra
 19252.100,TX,2,8,path=DIRECT;hop=0;dst=bcast;bytes=108
 19272.100,REPEAT,2,8,rep=4
 19272.100,TX,2,8,path=DIRECT;hop=0;dst=bcast;bytes=108
-19365.171,DET_STATE,55,-1,from=NORMAL;to=WEAK;busy=0.0735;cca=0.0245;pdr=0.2;err=0;noise=-96.8;rssi=-64.4;linkjam=1
+19365.171,DET_STATE,55,-1,from=NORMAL;to=WEAK;busy=0.0776;cca=0.0286;pdr=0.2;err=0;noise=-96.8;rssi=-64.4;linkjam=1
 19373.313,DET_STATE,53,-1,from=NORMAL;to=WEAK;busy=0.076;cca=0.016;pdr=0.2;err=0;noise=-96.5;rssi=-62.9;linkjam=1
 19400.000,GT_OFF,19,-1,jam_dbm=-92.05
 19423.761,DET_STATE,27,-1,from=JAMMED;to=NORMAL;busy=0.116;cca=0.016;pdr=0.552;err=0.81;noise=-96.1;rssi=-67.9;linkjam=2
@@ -920,7 +920,7 @@ time_ms,event,node,seq,extra
 24670.338,DET_STATE,51,-1,from=JAMMED;to=NORMAL;busy=0.092;cca=0.028;pdr=0.514;err=0.79;noise=-96.3;rssi=-61.1;linkjam=1
 24870.338,DET_STATE,51,-1,from=NORMAL;to=JAMMED;busy=0.076;cca=0.036;pdr=0.343;err=0.881;noise=-96.7;rssi=-55.8;linkjam=1
 24870.338,JAM_DETECTED,51,-1,from=NORMAL;to=JAMMED;busy=0.076;cca=0.036;pdr=0.343;err=0.881;noise=-96.7;rssi=-55.8;linkjam=1
-25104.434,DET_STATE,1,-1,from=NORMAL;to=WEAK;busy=0.0769;cca=0.0121;pdr=0.2;err=0;noise=-96.7;rssi=-59.6;linkjam=2
+25104.434,DET_STATE,1,-1,from=NORMAL;to=WEAK;busy=0.0769;cca=0.0162;pdr=0.2;err=0;noise=-96.7;rssi=-59.6;linkjam=2
 25151.445,ALERT_TARGET,7,14,src=50;dist=153.6
 25151.445,ALERT_TARGET,10,14,src=50;dist=56.34
 25151.445,ALERT_TARGET,24,14,src=50;dist=79.38
@@ -995,7 +995,7 @@ time_ms,event,node,seq,extra
 25171.445,TX,50,14,path=DIRECT;hop=0;dst=bcast;bytes=108
 25191.445,REPEAT,50,14,rep=2
 25191.445,TX,50,14,path=DIRECT;hop=0;dst=bcast;bytes=108
-25204.434,DET_STATE,1,-1,from=WEAK;to=NORMAL;busy=0.0685;cca=0.00806;pdr=0.767;err=0;noise=-96.7;rssi=-58.1;linkjam=0
+25204.434,DET_STATE,1,-1,from=WEAK;to=NORMAL;busy=0.0685;cca=0.0121;pdr=0.767;err=0;noise=-96.7;rssi=-58.1;linkjam=0
 25211.445,REPEAT,50,14,rep=3
 25211.445,TX,50,14,path=DIRECT;hop=0;dst=bcast;bytes=108
 25231.445,REPEAT,50,14,rep=4
@@ -1178,10 +1178,10 @@ time_ms,event,node,seq,extra
 29192.631,RX,1,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,18,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,54,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
+29192.631,RX,44,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,26,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,38,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,13,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
-29192.631,RX,32,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,49,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,55,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
 29192.631,RX,30,18,lat_ms=1.2299;path=RSU;hop=1;from=61;stale=0
@@ -1296,8 +1296,8 @@ time_ms,event,node,seq,extra
 32078.331,TX,12,21,path=DIRECT;hop=0;dst=bcast;bytes=108
 32098.331,REPEAT,12,21,rep=4
 32098.331,TX,12,21,path=DIRECT;hop=0;dst=bcast;bytes=108
-32805.019,DET_STATE,34,-1,from=NORMAL;to=WEAK;busy=0.0605;cca=0.00806;pdr=0.332;err=0;noise=-96.8;rssi=-62.8;linkjam=1
-32905.019,DET_STATE,34,-1,from=WEAK;to=NORMAL;busy=0.0643;cca=0.012;pdr=0.893;err=0;noise=-96.7;rssi=-60.1;linkjam=0
+32805.019,DET_STATE,34,-1,from=NORMAL;to=WEAK;busy=0.0605;cca=0.00806;pdr=0.332;err=0.00826;noise=-96.8;rssi=-62.6;linkjam=1
+32905.019,DET_STATE,34,-1,from=WEAK;to=NORMAL;busy=0.0643;cca=0.012;pdr=0.893;err=0.00862;noise=-96.7;rssi=-59.8;linkjam=0
 33042.252,ALERT_TARGET,0,22,src=57;dist=97.61
 33042.252,ALERT_TARGET,10,22,src=57;dist=123.4
 33042.252,ALERT_TARGET,12,22,src=57;dist=110.5
@@ -1355,7 +1355,7 @@ time_ms,event,node,seq,extra
 34802.106,DET_STATE,42,-1,from=WEAK;to=NORMAL;busy=0.0968;cca=0.0202;pdr=0.907;err=0.0182;noise=-96.8;rssi=-57.3;linkjam=0
 35008.297,DET_STATE,45,-1,from=NORMAL;to=JAMMED;busy=0.0522;cca=0.0201;pdr=0.35;err=0.889;noise=-96.7;rssi=-64.3;linkjam=1
 35008.297,JAM_DETECTED,45,-1,from=NORMAL;to=JAMMED;busy=0.0522;cca=0.0201;pdr=0.35;err=0.889;noise=-96.7;rssi=-64.3;linkjam=1
-35008.330,DET_STATE,23,-1,from=NORMAL;to=WEAK;busy=0.0766;cca=0.0161;pdr=0.275;err=0;noise=-96.8;rssi=-62;linkjam=2
+35008.330,DET_STATE,23,-1,from=NORMAL;to=WEAK;busy=0.0726;cca=0.0161;pdr=0.275;err=0;noise=-96.8;rssi=-62;linkjam=2
 35033.063,ALERT_TARGET,10,24,src=0;dist=81.14
 35033.063,ALERT_TARGET,12,24,src=0;dist=17.46
 35033.063,ALERT_TARGET,14,24,src=0;dist=116.3
@@ -1382,8 +1382,8 @@ time_ms,event,node,seq,extra
 35113.063,TX,0,24,path=DIRECT;hop=0;dst=bcast;bytes=108
 35800.000,GT_OFF,31,-1,jam_dbm=-92.07
 35900.000,GT_OFF,7,-1,jam_dbm=-92.08
-35910.965,DET_STATE,47,-1,from=NORMAL;to=WEAK;busy=0.104;cca=0.012;pdr=0.334;err=0;noise=-96.8;rssi=-60.3;linkjam=3
-36010.965,DET_STATE,47,-1,from=WEAK;to=NORMAL;busy=0.104;cca=0.012;pdr=0.793;err=0;noise=-96.8;rssi=-58;linkjam=0
+35910.965,DET_STATE,47,-1,from=NORMAL;to=WEAK;busy=0.104;cca=0.012;pdr=0.334;err=0.00813;noise=-96.8;rssi=-60.1;linkjam=3
+36010.965,DET_STATE,47,-1,from=WEAK;to=NORMAL;busy=0.104;cca=0.012;pdr=0.793;err=0.0171;noise=-96.8;rssi=-57.5;linkjam=0
 36136.617,ALERT_TARGET,10,25,src=57;dist=129.2
 36136.617,ALERT_TARGET,45,25,src=57;dist=155.9
 36136.617,ALERT_TARGET,51,25,src=57;dist=156.9
@@ -1406,8 +1406,8 @@ time_ms,event,node,seq,extra
 37034.346,RX,7,26,lat_ms=0.2868;path=DIRECT;hop=0;from=12;stale=0
 37034.346,RX,31,26,lat_ms=0.28682;path=DIRECT;hop=0;from=12;stale=0
 37139.438,DET_STATE,10,-1,from=JAMMED;to=NORMAL;busy=0.044;cca=0.024;pdr=0.5;err=0.909;noise=-96.6;rssi=-61;linkjam=0
-37355.929,DET_STATE,39,-1,from=NORMAL;to=WEAK;busy=0.0972;cca=0.0121;pdr=0.2;err=0.0157;noise=-96.8;rssi=-59;linkjam=1
-37455.929,DET_STATE,39,-1,from=WEAK;to=NORMAL;busy=0.101;cca=0.0121;pdr=0.625;err=0.0161;noise=-96.8;rssi=-57.3;linkjam=2
+37355.929,DET_STATE,39,-1,from=NORMAL;to=WEAK;busy=0.0972;cca=0.0121;pdr=0.2;err=0.00787;noise=-96.8;rssi=-59.3;linkjam=1
+37455.929,DET_STATE,39,-1,from=WEAK;to=NORMAL;busy=0.101;cca=0.0121;pdr=0.625;err=0.00806;noise=-96.8;rssi=-57.6;linkjam=2
 38108.297,DET_STATE,45,-1,from=JAMMED;to=NORMAL;busy=0.0321;cca=0.0161;pdr=1;err=0.836;noise=-95.9;rssi=-73.8;linkjam=0
 38165.500,ALERT_TARGET,10,27,src=45;dist=29.42
 38165.500,ALERT_TARGET,57,27,src=45;dist=162.1

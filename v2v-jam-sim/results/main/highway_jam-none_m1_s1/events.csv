@@ -686,7 +686,7 @@ time_ms,event,node,seq,extra
 35172.969,RX,53,24,lat_ms=0.28706;path=DIRECT;hop=0;from=29;stale=0
 35172.969,RX,47,24,lat_ms=0.28711;path=DIRECT;hop=0;from=29;stale=0
 35172.969,RX,14,24,lat_ms=0.28719;path=DIRECT;hop=0;from=29;stale=0
-35916.110,DET_STATE,6,-1,from=NORMAL;to=WEAK;busy=0.084;cca=0.016;pdr=0.2;err=0.0087;noise=-96.7;rssi=-57.8;linkjam=1
+35916.110,DET_STATE,6,-1,from=NORMAL;to=WEAK;busy=0.088;cca=0.016;pdr=0.2;err=0.0087;noise=-96.7;rssi=-57.8;linkjam=1
 36116.110,DET_STATE,6,-1,from=WEAK;to=NORMAL;busy=0.0843;cca=0.00402;pdr=0.755;err=0.0084;noise=-96.9;rssi=-54.2;linkjam=0
 36121.111,ALERT_TARGET,14,25,src=56;dist=186
 36121.111,ALERT_TARGET,43,25,src=56;dist=42.75

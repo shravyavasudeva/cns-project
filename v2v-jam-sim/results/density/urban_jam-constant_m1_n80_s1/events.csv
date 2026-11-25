@@ -341,7 +341,7 @@ time_ms,event,node,seq,extra
 15038.917,TX,25,4,path=DIRECT;hop=0;dst=bcast;bytes=108
 15058.917,REPEAT,25,4,rep=2
 15058.917,TX,25,4,path=DIRECT;hop=0;dst=bcast;bytes=108
-15071.728,DET_STATE,5,-1,from=JAMMED;to=NORMAL;busy=0.104;cca=0.0843;pdr=0.933;err=0.104;noise=-91.8;rssi=-76.4;linkjam=0
+15071.728,DET_STATE,5,-1,from=JAMMED;to=NORMAL;busy=0.108;cca=0.0884;pdr=0.933;err=0.104;noise=-91.8;rssi=-76.4;linkjam=0
 15078.917,REPEAT,25,4,rep=3
 15078.917,TX,25,4,path=DIRECT;hop=0;dst=bcast;bytes=108
 15098.917,REPEAT,25,4,rep=4

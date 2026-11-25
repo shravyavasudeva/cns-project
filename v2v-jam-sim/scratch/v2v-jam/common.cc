@@ -163,6 +163,7 @@ ParamsToJson(const Params& p)
       << "  \"jamStop\": " << p.jamStop << ",\n"
       << "  \"beaconHz\": " << p.beaconHz << ",\n"
       << "  \"beaconBytes\": " << p.beaconBytes << ",\n"
+      << "  \"beaconHzJam\": " << p.beaconHzJam << ",\n"
       << "  \"alertStart\": " << p.alertStart << ",\n"
       << "  \"alertInterval\": " << p.alertInterval << ",\n"
       << "  \"alertRadius\": " << p.alertRadius << ",\n"

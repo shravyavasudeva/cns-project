@@ -418,8 +418,8 @@ time_ms,event,node,seq,extra
 22165.731,DET_STATE,42,-1,from=NORMAL;to=JAMMED;busy=0.0884;cca=0.0201;pdr=0.356;err=0.817;noise=-96.8;rssi=-75;linkjam=3
 22165.731,JAM_DETECTED,42,-1,from=NORMAL;to=JAMMED;busy=0.0884;cca=0.0201;pdr=0.356;err=0.817;noise=-96.8;rssi=-75;linkjam=3
 22200.000,GT_OFF,32,-1,jam_dbm=-92.01
-22226.939,DET_STATE,18,-1,from=NORMAL;to=WEAK;busy=0.0763;cca=0.0201;pdr=0.46;err=0;noise=-96.8;rssi=-61.7;linkjam=1
-22326.939,DET_STATE,18,-1,from=WEAK;to=NORMAL;busy=0.0803;cca=0.0161;pdr=0.877;err=0;noise=-96.7;rssi=-61.6;linkjam=0
+22226.939,DET_STATE,18,-1,from=NORMAL;to=WEAK;busy=0.0803;cca=0.0241;pdr=0.46;err=0;noise=-96.8;rssi=-61.7;linkjam=1
+22326.939,DET_STATE,18,-1,from=WEAK;to=NORMAL;busy=0.0843;cca=0.0201;pdr=0.877;err=0;noise=-96.7;rssi=-61.6;linkjam=0
 22600.000,GT_ON,2,-1,jam_dbm=-91.92
 23175.173,ALERT_TARGET,2,12,src=14;dist=192.8
 23175.173,ALERT_TARGET,5,12,src=14;dist=174.9

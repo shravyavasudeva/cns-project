@@ -305,7 +305,7 @@ time_ms,event,node,seq,extra
 14139.293,TX,34,3,path=DIRECT;hop=0;dst=bcast;bytes=108
 14159.293,REPEAT,34,3,rep=4
 14159.293,TX,34,3,path=DIRECT;hop=0;dst=bcast;bytes=108
-14211.844,DET_STATE,10,-1,from=JAMMED;to=NORMAL;busy=0.044;cca=0.02;pdr=0.53;err=0.264;noise=-92.9;rssi=-78.8;linkjam=6
+14211.844,DET_STATE,10,-1,from=JAMMED;to=NORMAL;busy=0.048;cca=0.024;pdr=0.53;err=0.264;noise=-92.9;rssi=-78.8;linkjam=6
 14774.241,DET_STATE,75,-1,from=NORMAL;to=JAMMED;busy=0.0565;cca=0.0202;pdr=0.476;err=0.45;noise=-92.8;rssi=-76.7;linkjam=7
 14774.241,JAM_DETECTED,75,-1,from=NORMAL;to=JAMMED;busy=0.0565;cca=0.0202;pdr=0.476;err=0.45;noise=-92.8;rssi=-76.7;linkjam=7
 14800.000,GT_OFF,45,-1,jam_dbm=-92.04

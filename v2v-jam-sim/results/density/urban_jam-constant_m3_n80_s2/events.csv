@@ -1518,7 +1518,7 @@ time_ms,event,node,seq,extra
 24764.814,DET_STATE,19,-1,from=WEAK;to=NORMAL;busy=0.00803;cca=0.00803;pdr=0.538;err=0;noise=-96.3;rssi=-64.5;linkjam=0
 24768.577,DET_STATE,51,-1,from=WEAK;to=NORMAL;busy=0.0161;cca=0.012;pdr=0.615;err=0;noise=-96.2;rssi=-71.9;linkjam=0
 24778.531,DET_STATE,45,-1,from=NORMAL;to=WEAK;busy=0.008;cca=0;pdr=0.45;err=0.182;noise=-94.8;rssi=-76.4;linkjam=1
-24782.852,DET_STATE,76,-1,from=WEAK;to=NORMAL;busy=0.004;cca=0.004;pdr=0.647;err=0;noise=-96.5;rssi=-79.1;linkjam=1
+24782.852,DET_STATE,76,-1,from=WEAK;to=NORMAL;busy=0.008;cca=0.008;pdr=0.647;err=0;noise=-96.5;rssi=-79.1;linkjam=1
 24784.765,DET_STATE,33,-1,from=WEAK;to=NORMAL;busy=0.00803;cca=0.00402;pdr=1;err=0;noise=-96.7;rssi=-53.1;linkjam=0
 24787.294,DET_STATE,8,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0;pdr=1;err=0;noise=-96.6;rssi=-76.3;linkjam=0
 24792.979,DET_STATE,73,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.008;pdr=1;err=0;noise=-96.7;rssi=-53;linkjam=0

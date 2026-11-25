@@ -345,7 +345,7 @@ time_ms,event,node,seq,extra
 19252.100,TX,2,8,path=DIRECT;hop=0;dst=bcast;bytes=108
 19272.100,REPEAT,2,8,rep=4
 19272.100,TX,2,8,path=DIRECT;hop=0;dst=bcast;bytes=108
-19365.171,DET_STATE,55,-1,from=NORMAL;to=WEAK;busy=0.0735;cca=0.0245;pdr=0.2;err=0;noise=-96.9;rssi=-64;linkjam=1
+19365.171,DET_STATE,55,-1,from=NORMAL;to=WEAK;busy=0.0776;cca=0.0286;pdr=0.2;err=0;noise=-96.9;rssi=-64;linkjam=1
 19373.313,DET_STATE,53,-1,from=NORMAL;to=WEAK;busy=0.076;cca=0.016;pdr=0.2;err=0;noise=-96.5;rssi=-62.2;linkjam=1
 19400.000,GT_OFF,19,-1,jam_dbm=-92.05
 19465.171,DET_STATE,55,-1,from=WEAK;to=NORMAL;busy=0.0691;cca=0.0244;pdr=0.781;err=0.0137;noise=-96.8;rssi=-60.4;linkjam=0
@@ -526,7 +526,7 @@ time_ms,event,node,seq,extra
 24300.000,GT_OFF,21,-1,jam_dbm=-92.05
 24467.982,DET_STATE,43,-1,from=JAMMED;to=NORMAL;busy=0.101;cca=0.0202;pdr=0.5;err=0.804;noise=-96.4;rssi=-64;linkjam=2
 24600.000,GT_OFF,37,-1,jam_dbm=-92.02
-25104.434,DET_STATE,1,-1,from=NORMAL;to=WEAK;busy=0.0769;cca=0.0162;pdr=0.2;err=0;noise=-96.7;rssi=-59.6;linkjam=2
+25104.434,DET_STATE,1,-1,from=NORMAL;to=WEAK;busy=0.0769;cca=0.0121;pdr=0.2;err=0;noise=-96.7;rssi=-59.6;linkjam=2
 25151.445,ALERT_TARGET,7,14,src=50;dist=153.6
 25151.445,ALERT_TARGET,10,14,src=50;dist=56.34
 25151.445,ALERT_TARGET,24,14,src=50;dist=79.38
@@ -549,7 +549,7 @@ time_ms,event,node,seq,extra
 25151.732,RX,8,14,lat_ms=0.2868;path=DIRECT;hop=0;from=50;stale=0
 25151.732,RX,6,14,lat_ms=0.28704;path=DIRECT;hop=0;from=50;stale=0
 25151.732,RX,19,14,lat_ms=0.28712;path=DIRECT;hop=0;from=50;stale=0
-25204.434,DET_STATE,1,-1,from=WEAK;to=NORMAL;busy=0.0685;cca=0.0121;pdr=0.767;err=0;noise=-96.7;rssi=-57.8;linkjam=0
+25204.434,DET_STATE,1,-1,from=WEAK;to=NORMAL;busy=0.0685;cca=0.00806;pdr=0.767;err=0;noise=-96.7;rssi=-57.8;linkjam=0
 25367.982,DET_STATE,43,-1,from=NORMAL;to=JAMMED;busy=0.092;cca=0.024;pdr=0.467;err=0.802;noise=-96.6;rssi=-68.9;linkjam=1
 25367.982,JAM_DETECTED,43,-1,from=NORMAL;to=JAMMED;busy=0.092;cca=0.024;pdr=0.467;err=0.802;noise=-96.6;rssi=-68.9;linkjam=1
 25434.521,DET_STATE,7,-1,from=NORMAL;to=JAMMED;busy=0.0964;cca=0.0201;pdr=0.48;err=0.838;noise=-96.6;rssi=-67.6;linkjam=1

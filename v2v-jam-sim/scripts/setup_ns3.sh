@@ -8,7 +8,7 @@
 # What it does:
 #   1. apt installs the compilers and tools ns-3 needs
 #   2. downloads the ns-3.47 source (if not already there)
-#   3. copies scratch/v2v-jam into ns-3's scratch/ folder
+#   3. copies scratch/v2v-jam into ns-3's scratch/ folder and applies patches/ (ns-3.47 bug fix)
 #   4. configures an optimized build with only the modules we need, and builds
 #   5. runs a 15-second smoke test
 set -euo pipefail
@@ -40,6 +40,8 @@ fi
 echo "==> 3/5 Copying our code into $NS3_DIR/scratch/v2v-jam"
 mkdir -p "$NS3_DIR/scratch/v2v-jam"
 rsync -a --delete "$PROJECT_DIR/scratch/v2v-jam/" "$NS3_DIR/scratch/v2v-jam/"
+echo "==> 3/5 Applying our ns-3.47 bug-fix patch (see patches/README.md)"
+bash "$PROJECT_DIR/scripts/apply_ns3_patch.sh" "$NS3_DIR" --no-build
 
 echo "==> 4/5 Configuring and building (first build takes 10-30 minutes)"
 cd "$NS3_DIR"

@@ -193,8 +193,8 @@ time_ms,event,node,seq,extra
 10562.463,JAM_DETECTED,61,-1,from=CONGESTED;to=JAMMED;busy=0.988;cca=0.988;pdr=0.12;err=0.216;noise=-81.6;rssi=-60.5;linkjam=14
 10570.593,DET_STATE,10,-1,from=CONGESTED;to=JAMMED;busy=0.992;cca=0.992;pdr=0.069;err=0.231;noise=-78;rssi=-68.3;linkjam=11
 10570.593,JAM_DETECTED,10,-1,from=CONGESTED;to=JAMMED;busy=0.992;cca=0.992;pdr=0.069;err=0.231;noise=-78;rssi=-68.3;linkjam=11
-10571.597,DET_STATE,106,-1,from=CONGESTED;to=JAMMED;busy=1;cca=1;pdr=0.0261;err=0.25;noise=-64.8;rssi=-52.6;linkjam=15
-10571.597,JAM_DETECTED,106,-1,from=CONGESTED;to=JAMMED;busy=1;cca=1;pdr=0.0261;err=0.25;noise=-64.8;rssi=-52.6;linkjam=15
+10571.597,DET_STATE,106,-1,from=CONGESTED;to=JAMMED;busy=1;cca=1;pdr=0.036;err=0;noise=-65.5;rssi=-54.8;linkjam=14
+10571.597,JAM_DETECTED,106,-1,from=CONGESTED;to=JAMMED;busy=1;cca=1;pdr=0.036;err=0;noise=-65.5;rssi=-54.8;linkjam=14
 10572.333,DET_STATE,4,-1,from=CONGESTED;to=JAMMED;busy=1;cca=0.96;pdr=0.722;err=0.128;noise=-90.4;rssi=-74.3;linkjam=1
 10572.333,JAM_DETECTED,4,-1,from=CONGESTED;to=JAMMED;busy=1;cca=0.96;pdr=0.722;err=0.128;noise=-90.4;rssi=-74.3;linkjam=1
 10575.646,DET_STATE,105,-1,from=CONGESTED;to=JAMMED;busy=0.988;cca=0.976;pdr=0.278;err=0.0741;noise=-86.6;rssi=-71.1;linkjam=12
@@ -1424,7 +1424,7 @@ time_ms,event,node,seq,extra
 22200.000,GT_OFF,32,-1,jam_dbm=-92.01
 22269.122,DET_STATE,18,-1,from=WEAK;to=NORMAL;busy=0.06;cca=0.02;pdr=0.652;err=0.0208;noise=-96;rssi=-59.6;linkjam=0
 22270.593,DET_STATE,10,-1,from=JAMMED;to=NORMAL;busy=0.096;cca=0.088;pdr=1;err=0.194;noise=-91.6;rssi=-75.2;linkjam=0
-22371.597,DET_STATE,106,-1,from=JAMMED;to=NORMAL;busy=0.164;cca=0.16;pdr=1;err=0.121;noise=-91.6;rssi=-75.9;linkjam=0
+22371.597,DET_STATE,106,-1,from=JAMMED;to=NORMAL;busy=0.164;cca=0.16;pdr=1;err=0.182;noise=-91.6;rssi=-75.1;linkjam=0
 22600.000,GT_ON,2,-1,jam_dbm=-91.92
 23175.173,ALERT_TARGET,2,12,src=17;dist=111
 23175.173,ALERT_TARGET,5,12,src=17;dist=90.04

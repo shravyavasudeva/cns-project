@@ -1,12 +1,12 @@
 # Results: full experiment batch on ns-3.47
 
-These are the results of the complete experiment run of `v2v-jam-sim` (all presets: 361 simulation runs, plus 2 demo runs for the animation). This file explains **what was run, how to read every file and figure, what the numbers say, and what is odd or limited about them**.
+These are the results of the complete experiment run of `v2v-jam-sim` (all presets: 387 simulation runs, plus the smoke run and 2 demo runs for the animation). This file explains **what was run, how to read every file and figure, what the numbers say, and what is odd or limited about them**.
 
-- **Run date:** 24 Nov 2026
-- **Platform:** ns-3.47 (optimized build), WSL2 on Windows, Ubuntu 26.04.1, g++ 15.2.0, CMake 4.2.3, Python 3.14 + pandas 2.3.3
-- **Code:** branch `feature/full-simulation`, commit `1e0becd`, folder `v2v-jam-sim/scratch/v2v-jam`, unmodified
-- **Command:** `python3 run_batch.py --ns3 ~/ns-3.47 --preset all --jobs 2` (after `smoke` and `sanity`), then `analysis/metrics.py` and `analysis/plots.py`
-- **Outcome:** 360 of 361 preset runs succeeded (plus both demo runs). 1 run aborts inside ns-3 itself ([§7.1](#71-one-run-crashes-inside-ns-347)).
+- **Run date:** 25 Nov 2026 (replaces the unpatched 24 Nov batch, which is in git history at commit `35d3e0e`)
+- **Platform:** ns-3.47 (optimized build) **with our bug-fix patch** [`patches/ns-3.47-cca-idle-during-rx.patch`](../patches/README.md), WSL2 on Windows, Ubuntu 26.04.1, g++ 15.2.0, CMake 4.2.3, Python 3.14 + pandas 2.3.3
+- **Code:** branch `feature/full-simulation`, the commit that adds this file. Simulation logic is unchanged from `1e0becd`. The only C++ change writes `beaconHzJam` into `params.json`
+- **Command:** `python3 run_batch.py --ns3 ~/ns-3.47 --preset all --jobs 2` (after `smoke`), the two demo runs, then `analysis/metrics.py` and `analysis/plots.py`
+- **Outcome:** **387 of 387 preset runs succeeded**, plus smoke and both demo runs. The ns-3.47 crash from the 24 Nov batch is fixed ([§7.1](#71-ns-347-crash-found-and-fixed)).
 
 ---
 
@@ -26,13 +26,13 @@ These are the results of the complete experiment run of `v2v-jam-sim` (all prese
 
 ## 1. Headline findings
 
-1. **The code builds and runs on ns-3.47 without changes.** The build had no errors, and this is the first ns-3.47 build of this code.
+1. **Every run now completes.** The 24 Nov batch hit an ns-3.47 bug: one congestion run aborted inside ns-3's WiFi code. We traced it to `PhyEntity::SwitchMaybeToCcaBusy()` setting the radio IDLE in the middle of a reception, and fixed it with a one-line patch ([§7.1](#71-ns-347-crash-found-and-fixed)). The fix barely moves the numbers: 316 of 362 runs are identical to the unpatched batch, and no table value changes by more than 0.01 except the repaired cell.
 2. **The jammer works as intended.** Beacon PDR falls from 1.00 to 0.51 as jammer power rises from −10 to 30 dBm. At 20 dBm, PDR is 0.08 within 50 m of the jammer and back to about 1.0 beyond about 600 m.
 3. **Full mitigation (detection + L3 + L4) always helps, but only a little.** On-time alert reachability improves in **every** scenario × jammer combination, and on **every seed** (paired comparison, same traffic):
 
    | On-time reachability, mitigation 0 → 3 | constant jammer | reactive jammer |
    |---|---|---|
-   | Highway | 0.477 → **0.569** (+0.092, 5/5 seeds better) | 0.548 → **0.582** (+0.033, 5/5) |
+   | Highway | 0.477 → **0.569** (+0.092, 5/5 seeds better) | 0.548 → **0.582** (+0.034, 5/5) |
    | Local road | 0.503 → **0.532** (+0.029, 5/5) | 0.506 → **0.528** (+0.022, 3/5, 2 tied) |
    | Urban | 0.282 → **0.320** (+0.037, 5/5) | 0.343 → **0.400** (+0.057, 5/5) |
 
@@ -45,7 +45,10 @@ These are the results of the complete experiment run of `v2v-jam-sim` (all prese
    - **Constant jammer:** TPR 0.97 / 0.89 / 0.98 (highway / local / urban), FPR ≤ 3.4%, detection delay 330–520 ms.
    - **Reactive jammer:** TPR only 0.23–0.40, delay 3.6–5.1 s. The reactive jammer is the stealthier attack.
    - **Confounders** (congestion, weak signal, non-malicious interference): never called "jammed" more than 4.7% of the time. Highway congestion is correctly labelled CONGESTED 94% of the time.
-6. **L4 reduces detector sensitivity.** At mitigation 3, L4 lowers the beacon rate while jamming, so the detector has fewer frames to judge from. TPR drops from 0.90 to 0.51 on the local road and from 0.98 to 0.69 in urban. The highway (dense) keeps 0.96. This trade-off was already seen on ns-3.40 and is confirmed here.
+6. **L4 reduces detector sensitivity, and a 5 Hz jammed beacon rate mostly fixes it.** At mitigation 3, L4 lowers the beacon rate to 2 Hz while jamming, so the detector has fewer frames to judge from. In the main grid (constant jammer, m0 → m3) TPR drops from 0.89 to 0.51 on the local road and from 0.98 to 0.69 in urban, while the dense highway keeps 0.96. The new `beaconrate` experiment ([§5.8](#58-l4-beacon-rate-while-jammed-beaconrate-preset), seeds 1–3, where 2 Hz gives TPR 0.49 local / 0.74 urban) shows:
+   - **5 Hz** restores urban detection fully (0.74 → **0.97**), costs nothing anywhere in on-time delivery, and helps the local road only a little (0.49 → 0.54).
+   - **10 Hz** also restores the local road (→ **0.93**), but on the dense highway it hurts: on-time 0.57 → **0.50** and mean latency 3 → **18 ms**.
+   - On-time delivery on the local road and in urban is the same at 2, 5 and 10 Hz (±0.01).
 7. **Density matters on the highway.** As traffic grows (30 → 120 vehicles), unmitigated reachability falls (0.61 → 0.40) while full mitigation holds at about 0.60. At 120 vehicles, **L3 on its own is worse than detection alone** (0.48 vs 0.55), because relay transmissions add load to an already busy channel. Adding L4 brings it back to 0.60.
 
 ---
@@ -60,8 +63,9 @@ The default run lasts **40 simulated seconds**: warm-up from 0–10 s, the jamme
 | `sanity` | jammer power −10, 0, 10, 20, 30 dBm and no jammer; highway, mitigation 0; seeds 1–2 | 12 | `sanity/` |
 | `main` | scenario {highway, local, urban} × jammer {none, constant, reactive} × mitigation {0,1,2,3} × seeds 1–5 | 180 | `main/` |
 | `density` | vehicles (highway 30/60/120, local 6/12/24, urban 20/40/80) × mitigation {0–3} × seeds 1–3; constant jammer | 108 | `density/` |
-| `confounders` | {congestion, weak, interference} × {highway, local} × mitigation {0,3} × seeds 1–3; **no jammer** | 36 (35 ok) | `confounders/` |
+| `confounders` | {congestion, weak, interference} × {highway, local} × mitigation {0,3} × seeds 1–3; **no jammer** | 36 | `confounders/` |
 | `rsu` | RSU {0,1} × {highway, local} × mitigation {2,3} × seeds 1–3; constant jammer | 24 | `rsu/` |
+| `beaconrate` | L4 beacon rate while jammed `beaconHzJam` {2, 5, 10} Hz × {highway, local, urban} × seeds 1–3; constant jammer, mitigation 3 | 27 | `beaconrate/` |
 | demo | highway, constant jammer, seed 1, mitigation 0 and 3, with position logging for the animation | 2 | `demo/` |
 
 **Mitigation levels are cumulative:**
@@ -90,10 +94,10 @@ All scenarios also use Nakagami fading. The jammer sits at the road centre or in
 results/
 ├── README.md                ← this file
 ├── batch_run_log.txt        ← console log of the full batch (run order, wall time, ok/FAILED)
-├── summary_runs.csv         ← ONE ROW PER RUN: all parameters + all metrics (362 rows: 360 preset runs + 2 demo)
+├── summary_runs.csv         ← ONE ROW PER RUN: all parameters + all metrics (390 rows: 387 preset runs + smoke + 2 demo)
 ├── summary_grouped.csv      ← mean/std per configuration (seeds pooled)
 ├── figures/                 ← all plots (PNG) + detector_accuracy.csv
-├── smoke/  sanity/  main/  density/  confounders/  rsu/
+├── smoke/  sanity/  main/  density/  confounders/  rsu/  beaconrate/
 │   └── <run-name>/          ← one folder per simulation run (raw output)
 └── demo/
     ├── highway_jam-constant_m0_s1_poslog/   ← demo run without mitigation (+ positions.csv)
@@ -102,7 +106,7 @@ results/
     └── demo_highway_m3.gif                  ← animation, full mitigation
 ```
 
-**Run-folder names** encode the parameters: `<scenario>_jam-<jammer>[_conf-<confounder>]_m<mitigation>[_n<vehicles>][_rsu<0|1>][_p<jamPower>]_s<seed>`. For example, `local_jam-constant_m3_n24_s2` is the local road, constant jammer, mitigation 3, 24 vehicles, seed 2.
+**Run-folder names** encode the parameters: `<scenario>_jam-<jammer>[_conf-<confounder>]_m<mitigation>[_n<vehicles>][_rsu<0|1>][_p<jamPower>][_bj<beaconHzJam>]_s<seed>`. For example, `local_jam-constant_m3_n24_s2` is the local road, constant jammer, mitigation 3, 24 vehicles, seed 2.
 
 **Files in every run folder:**
 
@@ -120,13 +124,13 @@ results/
 **All times in CSV files are milliseconds** (columns ending in `_ms`).
 
 **`summary_runs.csv` columns:**
-- Run parameters: `scenario, jammer, confounder, mitigation, vehicles, rsu, jamPower, seed, speed, simTime, preset, run_dir`.
+- Run parameters: `scenario, jammer, confounder, mitigation, vehicles, rsu, jamPower, seed, speed, simTime, beaconHzJam, preset, run_dir`.
 - Counts: `alerts, targets`.
 - Every metric in §4 of the main README: `ontime_ratio, reach_ratio, deadline_miss_ratio, stale_accept_ratio, alert_lat_ms, alert_lat_p95_ms, alert_jitter_ms, via_alt_ratio, jam_suspected_at_alert, recovery_alerts, reroutes, no_relay_rate, relay_ok_rate, recovery_ms, route_breaks_per_alert, path_switches_per_alert, alert_tx_per_alert, routing_tx_per_alert, drop_deadline, det_tpr, det_fpr, det_delay_ms, share_normal/congested/weak/jammed, beacon_pdr, beacon_lat_ms, beacon_jitter_ms, goodput_kbps, interrupt_ms, max_gap_ms`.
 
 **Empty (NaN) cells are expected, not errors:**
-- Routing metrics (`no_relay_rate`, `relay_ok_rate`, `recovery_ms`, `route_breaks_per_alert`, `path_switches_per_alert`) are empty in 213 runs. In those runs L3 is off (mitigation < 2) or recovery never triggered (no jammer).
-- `det_tpr` and `det_delay_ms` are empty in exactly the 97 runs **without a jammer**: there is nothing to detect, so a true-positive rate is undefined. `det_fpr` is still reported there.
+- Routing metrics (`no_relay_rate`, `relay_ok_rate`, `recovery_ms`, `route_breaks_per_alert`, `path_switches_per_alert`) are empty in 214 runs. In those runs L3 is off (mitigation < 2) or recovery never triggered (no jammer).
+- `det_tpr` and `det_delay_ms` are empty in exactly the 98 runs **without a jammer**: there is nothing to detect, so a true-positive rate is undefined. `det_fpr` is still reported there.
 
 ### Metric cheat-sheet
 
@@ -154,13 +158,15 @@ results/
 
 | # | Check | How | Result |
 |---|---|---|---|
-| 1 | **Build on ns-3.47** | `./ns3 configure --build-profile=optimized` + `./ns3 build` | ✅ Builds without errors. First successful ns-3.47 build of this code. |
+| 1 | **Build on ns-3.47** | `./ns3 configure --build-profile=optimized` + `./ns3 build`, with `patches/` applied | ✅ Builds without errors |
 | 2 | **Smoke test** | `--preset smoke` | ✅ All metrics are numbers (no NaN): ontime 0.833, beacon PDR 0.907, det TPR 0.547, FPR 0.004 |
 | 3 | **Jammer sanity, power sweep** | `--preset sanity` | ✅ PDR falls monotonically 0.997 → 0.986 → 0.953 → 0.851 → 0.506 for −10…30 dBm. No jammer: 0.997 |
 | 4 | **Jammer sanity, distance** | `sanity_pdr_vs_distance.png` | ✅ PDR 0.08 within 50 m of a 20 dBm jammer, recovers to about 1.0 beyond about 600 m. Before jamming: about 1.0 everywhere |
 | 5 | **No-jammer baseline** | `main`, jammer none | ✅ Highway and local reachability 1.000 (the mitigation stack causes no harm). Urban 0.70: see §7.3 |
-| 6 | **Full experiment batch** | `--preset all` | ✅ 360/361 runs. ❌ 1 run aborts inside ns-3 (§7.1) |
-| 7 | **Determinism of the failure** | the failed run re-run on its own | Fails again at the same simulated time. It is deterministic, not a random crash |
+| 6 | **Full experiment batch** | `--preset all` | ✅ 387/387 runs, plus smoke and 2 demo runs. No run contains an ns-3 abort or assertion message |
+| 7 | **ns-3 crash fix** | the formerly crashing run, in an ns-3.47 **debug** build (all `NS_ASSERT`s on) and in the optimized build | ✅ Unpatched debug build: assertion at 0.82 s. Patched: completes in both builds (§7.1) |
+| 7b | **Effect of the patch** | every run paired with the unpatched 24 Nov batch | ✅ 316/362 runs bit-for-bit identical. The 46 that differ are all dense or congested runs (highway, or urban in the density sweep); the largest single-run change is 0.03 on-time ratio, and the mean change is about 0 |
+| 7c | **Determinism** | `beaconrate` runs at 2 Hz (the default) vs the same seeds in `main` at mitigation 3 | ✅ Identical metrics |
 | 8 | **Metrics sanity** | NaN audit of `summary_runs.csv` | ✅ Every NaN accounted for (§3) |
 | 9 | **Paired mitigation test** | per-seed difference, same traffic | ✅ Mitigation 3 beats 0 on every seed in 5 of 6 scenario × jammer cells (3/5 + 2 ties in the sixth) |
 | 10 | **Detector false alarms under confounders** | `--preset confounders` | ✅ FPR ≤ 4.7% (worst: highway congestion at mitigation 0) |
@@ -191,8 +197,8 @@ The seed-to-seed spread (±0.04 to ±0.12) is **larger than most of the gains**,
 |---|---|---|---|---|---|---|
 | m0→m1 (detection + repeat) | **+0.072** (5/5 seeds) | +0.011 (5/5) | +0.019 (5/5) | +0.012 (3/5) | +0.008 (4/5) | +0.009 (5/5) |
 | m1→m2 (+L3) | +0.018 (4/5) | +0.020 (5/5) | **−0.006** (0/5, 2 worse) | +0.014 (4/5) | +0.023 (5/5) | **+0.056** (5/5) |
-| m2→m3 (+L4) | +0.002 | +0.003 | +0.016 (4/5) | −0.004 | +0.007 (5/5) | −0.008 |
-| **m0→m3 (total)** | **+0.092 (5/5)** | +0.033 (5/5) | +0.029 (5/5) | +0.022 (3/5) | +0.037 (5/5) | +0.057 (5/5) |
+| m2→m3 (+L4) | +0.002 | +0.004 | +0.016 (4/5) | −0.004 | +0.007 (5/5) | −0.008 |
+| **m0→m3 (total)** | **+0.092 (5/5)** | +0.034 (5/5) | +0.029 (5/5) | +0.022 (3/5) | +0.037 (5/5) | +0.057 (5/5) |
 
 (x/5 = number of seeds where the step improved reachability; the rest were tied or worse.)
 
@@ -250,7 +256,7 @@ On the sparse local road, rerouting usually has **nothing to reroute through**. 
 | local | reactive jammer | 0.329 | 0.000 | 3.7 s | 11% |
 | urban | constant jammer | **0.979** | 0.029 | 329 ms | 24% |
 | urban | reactive jammer | 0.398 | 0.004 | 3.6 s | 9% |
-| highway | congestion (no jammer) | – | 0.047 | – | 5% (94% **CONGESTED**) |
+| highway | congestion (no jammer, 3 seeds) | – | 0.047 | – | 5% (94% **CONGESTED**) |
 | highway | weak channel | – | 0.000 | – | 0% (9% **WEAK**) |
 | highway | interference | – | 0.000 | – | 0% |
 | local | congestion / interference | – | 0.000 | – | 0% |
@@ -262,7 +268,7 @@ On the sparse local road, rerouting usually has **nothing to reroute through**. 
 - The detector **separates confounders well**. Highway congestion is mostly labelled CONGESTED (the CCA_BUSY-only test works), and weak-signal areas are labelled WEAK. Neither is mistaken for jamming.
 - On the **local road the congestion confounder does not actually congest** the channel (99.9% NORMAL). With only 12 vehicles, the extra traffic is not enough to saturate the channel. Treat local congestion results as "no stress" rather than a real test.
 
-**Effect of L4 on detection (main grid, constant jammer, TPR at m0 → m3):** highway 0.97 → 0.96, local **0.89 → 0.51**, urban **0.98 → 0.69**. Density shows the same pattern: highway at 30 vehicles falls 0.97 → 0.60 at m3, while 120 vehicles stays at 0.97. The fewer beacons around, the more L4's rate reduction starves the detector.
+**Effect of L4 on detection (main grid, constant jammer, TPR at m0 → m3):** highway 0.97 → 0.96, local **0.89 → 0.51**, urban **0.98 → 0.69**. Density shows the same pattern: highway at 30 vehicles falls 0.97 → 0.59 at m3, while 120 vehicles stays at 0.97. The fewer beacons around, the more L4's rate reduction starves the detector. §5.8 tests higher jammed beacon rates.
 
 ### 5.6 Density
 
@@ -270,7 +276,7 @@ On the sparse local road, rerouting usually has **nothing to reroute through**. 
 |---|---|---|---|---|---|---|
 | highway | 30 | 0.605 | 0.641 | 0.665 | 0.654 | 46% |
 | highway | 60 | 0.487 | 0.547 | 0.568 | 0.574 | 41% |
-| highway | 120 | 0.396 | 0.546 | **0.478** | **0.598** | 37% |
+| highway | 120 | 0.396 | 0.546 | **0.474** | **0.598** | 37% |
 | local | 6 | 0.423 | 0.449 | 0.454 | 0.459 | 79% |
 | local | 12 | 0.504 | 0.525 | 0.521 | 0.533 | 80% |
 | local | 24 | 0.518 | 0.536 | 0.535 | 0.541 | 87% |
@@ -291,14 +297,36 @@ On the sparse local road, rerouting usually has **nothing to reroute through**. 
 | local | 0 | 0.521 | 0.533 | 80% | 0% |
 | local | 1 | 0.535 | 0.526 | 43% | 4% |
 
-- **On the highway without an RSU, L3 never finds a relay** (NO_RELAY 100%). The relay-vehicle selection never succeeds there, so all L3 help on the highway comes from the RSU. This is worth investigating: the relay-scoring rule may be too strict for fast highway traffic, or the neighbour table may be empty because beacons are jammed.
+- **On the highway without an RSU, L3 never finds a relay** (NO_RELAY 100%), so all L3 help on the highway comes from the RSU. Cause: see §7.5.
 - Adding an RSU to the local road halves NO_RELAY (80% → 43%), but reachability barely moves (+0.014 at m2, −0.007 at m3). The RSU is reachable, but the vehicles that missed the alert are mostly too deep in the jammed area to hear the RSU either.
+
+### 5.8 L4 beacon rate while jammed (`beaconrate` preset)
+
+L4 (mitigation 3) lowers the beacon rate while jamming is suspected, to leave the channel to alerts. The default is 2 Hz. This preset reruns the constant-jammer, mitigation-3 cell at 2, 5 and 10 Hz (seeds 1–3; 2 Hz is identical to `main` at m3). For reference, without the slow-down (m2) TPR is 0.97 / 0.93 / 0.98 (highway / local / urban).
+
+| Scenario | `beaconHzJam` | Detector TPR (seed range) | FPR | On-time | Mean alert latency | Beacon PDR |
+|---|---|---|---|---|---|---|
+| highway | 2 | 0.96 (0.95–0.96) | 0.021 | **0.574** | **3.2 ms** | 0.93 |
+| highway | 5 | 0.97 (0.97–0.97) | 0.025 | **0.574** | 5.0 ms | 0.93 |
+| highway | 10 | 0.97 (0.97–0.97) | 0.026 | 0.499 | 18.0 ms | 0.91 |
+| local | 2 | **0.49** (0.38–0.55) | 0.026 | 0.533 | 1.9 ms | 0.75 |
+| local | 5 | 0.54 (0.48–0.62) | 0.007 | 0.525 | 1.1 ms | 0.70 |
+| local | 10 | **0.93** (0.89–0.98) | 0.043 | 0.523 | 2.7 ms | 0.65 |
+| urban | 2 | **0.74** (0.69–0.80) | 0.025 | 0.290 | 3.0 ms | 0.54 |
+| urban | 5 | **0.97** (0.97–0.98) | 0.030 | 0.289 | 3.7 ms | 0.45 |
+| urban | 10 | 0.98 (0.98–0.98) | 0.028 | 0.292 | 5.8 ms | 0.38 |
+
+- **The detector starves at 2 Hz on sparse roads, as suspected.** Raising the rate brings TPR back to the no-L4 level: urban needs 5 Hz, the local road (12 vehicles) needs 10 Hz.
+- **On the dense highway, 10 Hz costs real performance:** on-time delivery 0.574 → 0.499 and latency 3 → 18 ms, i.e. most of L4's latency benefit is lost. Paired by seed (same traffic), 10 Hz is worse than 2 Hz on **all 3 seeds** for both metrics. Beacons compete with alerts again on a busy channel. At 5 Hz the highway shows no loss.
+- **On the local road and in urban, alert delivery doesn't depend on the beacon rate** (on-time within ±0.01). Beacon PDR falls as the rate rises because more beacons are expected, not because the channel is worse.
+- **FPR stays ≤ 4.3%** at every rate.
+- **Recommendation (team decision):** 5 Hz is the best single default: it fixes urban and costs nothing on the highway. The cleanest option is a density-adaptive rate, e.g. 10 Hz when the neighbour table is small (sparse road) and 2–5 Hz when it is large. The defaults were **not** changed for this batch: every other preset still uses 2 Hz.
 
 ---
 
 ## 6. Every figure explained
 
-All figures are in `figures/`. Error bars are ±1 standard deviation across seeds.
+All figures are in `figures/`. Error bars are 95% confidence intervals of the mean across seeds (1.96 · std / √n). With 3–5 seeds they are wide, so use the paired per-seed comparisons in §5 to judge small differences.
 
 | Figure | What it shows | How to read it / key takeaway |
 |---|---|---|
@@ -311,6 +339,7 @@ All figures are in `figures/`. Error bars are ±1 standard deviation across seed
 | `routing_by_scenario.png` | Three L3 panels: NO_RELAY rate, path switches per alert, route recovery time (levels c and d) | Local road: NO_RELAY about 60–65% (nothing to reroute through). Urban: relays almost always available, but about 0.8 path switches per alert and about 22 ms recovery (the first choice often fails). Highway: in between |
 | `ontime_vs_density.png` | Reachability vs number of vehicles, per scenario, per mitigation level | Highway: the gap between (a) and (d) **widens with density**, and (c) dips at 120 vehicles. Local and urban: lines are close together at every density |
 | `rsu_effect.png` | Reachability with and without an RSU (levels c, d) on highway and local | Small differences. Read together with the NO_RELAY table in §5.7, which shows the RSU is essential for L3 on the highway |
+| `beacon_rate.png` | Left: detector TPR vs L4 beacon rate while jammed (2/5/10 Hz) per scenario. Right: on-time reachability for the same runs (constant jammer, mitigation d) | Left: urban recovers by 5 Hz, local needs 10 Hz, highway is flat. Right: flat lines, except the highway drop at 10 Hz. See §5.8 |
 | `detector_states.png` | Stacked bars: share of time the detector said normal / congested / weak / jammed, per scenario × condition (mitigation 0) | Shows confounders are **not** mistaken for jamming: congestion is orange, weak is green, red appears only with a jammer. (The x-axis labels overlap slightly; the same data is in `detector_accuracy.csv`) |
 | `detector_accuracy.csv` | TPR, FPR, delay and state shares per scenario × condition (mitigation 0) | Table form of §5.5 |
 | `demo/demo_highway_m0.gif`, `demo_highway_m3.gif` | Animation of highway seconds 8–25, constant jammer, without and with full mitigation | For the presentation: shows vehicles, the jammer's zone and alert propagation. Compare side by side |
@@ -319,22 +348,26 @@ All figures are in `figures/`. Error bars are ±1 standard deviation across seed
 
 ## 7. Anomalies, failures and caveats
 
-### 7.1 One run crashes inside ns-3.47
-`confounders/highway_jam-none_conf-congestion_m0_s2` aborts at simulated time 8.59 s. The error comes from ns-3's own WiFi interference model:
+### 7.1 ns-3.47 crash: found and fixed
+In the unpatched 24 Nov batch, `confounders/highway_jam-none_conf-congestion_m0_s2` aborted at simulated time 8.59 s inside ns-3's WiFi interference model:
 
 ```
 aborted. cond="it == niIt->second.end()", file=src/wifi/model/interference-helper.cc, line=465
   in InterferenceHelper::CalculateNoiseInterferenceW  ← PhyEntity::EndOfMpdu
 ```
 
-- It is **deterministic**: re-running it fails at the same time.
-- **Our code does not touch the PHY's receive state.** It never calls `ResetCca`, sleep or off modes, or channel switching.
-- The failure happens in ns-3's bookkeeping of overlapping signals (`m_niChanges`) under a very busy channel: 60 vehicles plus extra congestion traffic. It looks like an ns-3.47 bug triggered by this exact traffic pattern.
-- The run folder is kept, with the crash trace in `stdout.txt` and partial `events.csv`, but it is **excluded from the summaries**. The "highway / congestion / mitigation 0" cell therefore averages **2 seeds instead of 3**. The 4.7% FPR figure for highway congestion comes from those 2 seeds.
-- **Options:** report it as is, or rerun that cell with a replacement seed (e.g. seed 4 for both m0 and m3, to keep the pairing). It is not worth patching ns-3 for a course project.
+- **It was an ns-3.47 bug, not ours.** In a debug build, the same run fails much earlier (0.82 s) at `NS_ASSERT(!m_wifiPhy->m_currentEvent)` in `PhyEntity::StartReceivePreamble`. With `NS_LOG` on node 33 we saw the sequence:
+  1. the radio locks onto a frame's preamble (−83 dBm), which keeps it in CCA_BUSY;
+  2. 0.23 µs later a too-weak frame from a distant car arrives, and ns-3 re-checks CCA using energy detection only (−62 dBm);
+  3. that check ignores the frame being decoded and sets the radio **IDLE mid-reception**;
+  4. the next frame starts a second reception, and the interference helper prunes the first frame's history, so ns-3 aborts when the first frame ends.
+- The same abort was reported by another ns-3.46/3.47 user ([ns-3-users thread](https://groups.google.com/g/ns-3-users/c/tCgI2wx1fcs)). No upstream fix existed when we checked.
+- **Fix:** one condition in `PhyEntity::SwitchMaybeToCcaBusy()`: don't return to IDLE while a frame is still being received. That's already how ns-3 behaves once the payload starts. Full write-up: [`patches/README.md`](../patches/README.md). Apply it with `bash scripts/apply_ns3_patch.sh`.
+- **Result:** the run now completes (debug and optimized builds). The highway-congestion cell has all **3 seeds**: on-time at m0 is 0.868 (the repaired seed 2 is the worst seed, 0.768), and FPR is still 4.7%.
+- **Impact on everything else is negligible** (test 7b in §4): 316/362 runs are identical, and the 46 that changed are dense or congested runs, where the bug window occurs, with changes ≤ 0.03 per run.
 
 ### 7.2 Run times and machine stalls
-A normal run takes 5–60 s of real time (urban and local about 5–9 s, highway about 30–60 s). A few runs took 650–3550 s. They always came **in pairs that finished within 2 s of each other**, and their outputs (event counts, file sizes) are identical in shape to their fast siblings. This is the machine sleeping or WSL being suspended, **not** a simulation problem. **The results are unaffected.** The full batch took 132 min of wall time.
+A normal run takes 5–60 s of real time (urban and local about 5–9 s, highway about 30–60 s). In the 24 Nov batch a few runs took 650–3550 s. They always came **in pairs that finished within 2 s of each other**, and their outputs (event counts, file sizes) are identical in shape to their fast siblings. This is the machine sleeping or WSL being suspended, **not** a simulation problem. **The results are unaffected.** One pair of sanity runs in this batch took 1111 s each (finishing together, same pattern). The full batch took 69 min of wall time (132 min on 24 Nov, which had more stalls).
 
 ### 7.3 Urban baseline is only 0.70 without a jammer
 With no jammer, the urban scenario delivers alerts on time to only **70%** of targets (beacon PDR also 0.70). That is because the urban scenario uses path-loss exponent 3.0 + Nakagami fading (modelling buildings), while the target radius is 200 m for every scenario. Many "targets" are simply out of reliable radio range, especially across the intersection.
@@ -345,7 +378,7 @@ With no jammer, the urban scenario delivers alerts on time to only **70%** of ta
 In the sanity sweep, the detector FPR rises to **0.40 at 30 dBm**, from at most 0.03 at 20 dBm and below. Ground truth calls a node "jammed" only if the jammer's **deterministic** (no-fading) received power is ≥ −92 dBm. The most likely explanation: at 30 dBm, nodes just outside that boundary still see a strongly raised noise floor (fading, plus the jammer's sheer power), and the detector, correctly from their point of view, reports jamming. If so, this is a property of the ground-truth definition rather than a detector bug. It has not been verified node by node. It only affects the 30 dBm sanity point; every other experiment uses 20 dBm.
 
 ### 7.5 Highway relay vehicles never selected without an RSU
-See §5.7: `rsu=0` on the highway gives NO_RELAY = 100%. On the local road, without an RSU, relays are sometimes found (20%). Worth checking whether the relay-candidate filter in `relay.cc` (link lifetime, distance to jam centre) is too strict at 30 m/s.
+See §5.7: `rsu=0` on the highway gives NO_RELAY = 100%. On the local road, without an RSU, relays are sometimes found (20%). **This is by design, not a bug.** `relay.cc` (`Router`, relay-vehicle loop) skips any neighbour that reports jamming or whose link is jammed, because such a vehicle is itself inside the jammed area. Alert sources are picked within 250 m of the jammer, whose reach is about 600 m, so on a straight highway every neighbour a source can hear is also jammed. The `NO_RELAY` events confirm it: across 168 events, sources had a median of 6 neighbours (0–30), and none was eligible (`tried=0`). Only the RSU, with its wired backhaul, leads out of the zone. **Team decision:** report it as is, or allow jammed neighbours closer to the zone edge (ranked by distance from the jammer) to test multi-hop escape.
 
 ### 7.6 Local-road congestion confounder doesn't congest
 See §5.5. Twelve vehicles plus congestion traffic stays below the busy threshold, so this cell does not test the detector's congestion logic.
@@ -373,7 +406,7 @@ The main README reported first-look numbers from ns-3.40 (macOS, one seed). On n
 | Unaffected beyond | about 600 m | about 600 m | ✅ same |
 | Detector, constant jammer (highway) | TPR 0.96 / FPR 0.02 | TPR 0.97 / FPR 0.03 | ✅ |
 | Detector, reactive jammer | TPR 0.26 | TPR 0.23 (highway) – 0.40 (urban) | ✅ |
-| Confounder false alarms | ≤ 0.5% | 0–0.1%, except highway congestion **4.7%** | ⚠️ congestion FPR higher (2 seeds, §7.1) |
+| Confounder false alarms | ≤ 0.5% | 0–0.1%, except highway congestion **4.7%** | ⚠️ congestion FPR higher (3 seeds) |
 | Highway on-time m0 → m3 | 0.50 → 0.56 | 0.48 → 0.57 | ✅ |
 | Local on-time m0 → m3 | 0.55 → 0.56 | 0.50 → 0.53 | ✅ (similar small gain) |
 | Local NO_RELAY at m2 | 89% | 80% | ✅ |
@@ -386,11 +419,11 @@ The ns-3.40 conclusions hold on ns-3.47 and across seeds.
 
 ## 9. Suggested next steps
 
-1. **Detector vs L4 trade-off:** rerun the `main` constant-jammer cells at mitigation 3 with `--beaconHzJam=5` and `--beaconHzJam=10`. Check whether detection (TPR) recovers without losing L4's latency and staleness benefits.
+1. ~~Detector vs L4 trade-off~~ ✅ done (§5.8). **Team decision:** keep 2 Hz, switch the default to 5 Hz, or make the jammed beacon rate density-adaptive. Changing the default means re-running the presets.
 2. **Reactive-jammer detection:** TPR 0.23–0.40 is the weakest point. Try lower `--errThr` / `--enterCount` (calibration, main README §10), then re-run the presets.
-3. **Highway relay selection** (§7.5): check why no relay vehicle is ever chosen without an RSU.
+3. **Highway relay selection** (§7.5): cause understood (jammed neighbours are filtered out by design). Decide whether to allow edge-of-zone relays.
 4. **Urban target radius** (§7.3): decide whether to use a scenario-dependent radius, so the urban baseline is about 1.0.
-5. **Replace the crashed seed** (§7.1) if the confounder table needs 3 seeds in every cell.
+5. ~~Replace the crashed seed~~ ✅ not needed: ns-3 bug fixed (§7.1).
 6. **More seeds** (e.g. 10) for `main` if the report needs confidence intervals that don't overlap.
 
 ---
@@ -398,22 +431,25 @@ The ns-3.40 conclusions hold on ns-3.47 and across seeds.
 ## 10. How to reproduce
 
 ```bash
-# ns-3.47 with the code copied into scratch/ (see main README §3)
+# ns-3.47 with the code copied into scratch/ (see main README §3) AND our patch applied
+bash scripts/apply_ns3_patch.sh ~/ns-3.47 --no-build
 cd ~/ns-3.47 && ./ns3 configure --build-profile=optimized --disable-werror && ./ns3 build
 
 cd ~/cns-project/v2v-jam-sim
 python3 run_batch.py --ns3 ~/ns-3.47 --preset smoke
 python3 run_batch.py --ns3 ~/ns-3.47 --preset sanity --jobs 2
-python3 run_batch.py --ns3 ~/ns-3.47 --preset all    --jobs 2   # skips finished runs
+python3 run_batch.py --ns3 ~/ns-3.47 --preset all    --jobs 2   # 387 runs incl. beaconrate; skips finished runs
 python3 analysis/metrics.py --results results
 python3 analysis/plots.py   --results results
 
 # demo animation
 B=~/ns-3.47/build/scratch/v2v-jam/ns3.47-v2v-jam-optimized
-$B --scenario=highway --jammer=constant --mitigation=3 --seed=1 --posLog=1 \
-   --outDir=$PWD/results/demo/highway_jam-constant_m3_s1_poslog
-python3 analysis/animate.py --run results/demo/highway_jam-constant_m3_s1_poslog \
-   --out results/demo/demo_highway_m3.gif
+for m in 0 3; do
+  $B --scenario=highway --jammer=constant --mitigation=$m --seed=1 --posLog=1 \
+     --outDir=$PWD/results/demo/highway_jam-constant_m${m}_s1_poslog
+  python3 analysis/animate.py --run results/demo/highway_jam-constant_m${m}_s1_poslog \
+     --out results/demo/demo_highway_m${m}.gif
+done
 ```
 
-Runs are deterministic for a given seed and ns-3 version, so these commands reproduce the numbers above exactly.
+Runs are deterministic for a given seed, ns-3 version and patch set, so these commands reproduce the numbers above exactly. Without the patch, numbers differ slightly and one run aborts.

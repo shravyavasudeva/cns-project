@@ -955,7 +955,7 @@ time_ms,event,node,seq,extra
 10387.066,DET_STATE,16,-1,from=NORMAL;to=JAMMED;busy=0.484;cca=0.472;pdr=0.222;err=0.154;noise=-87.5;rssi=-73.9;linkjam=3
 10387.066,JAM_DETECTED,16,-1,from=NORMAL;to=JAMMED;busy=0.484;cca=0.472;pdr=0.222;err=0.154;noise=-87.5;rssi=-73.9;linkjam=3
 10387.069,DET_STATE,76,-1,from=WEAK;to=NORMAL;busy=0.213;cca=0.205;pdr=0.538;err=0.0455;noise=-92.1;rssi=-78.7;linkjam=2
-10390.063,DET_STATE,44,-1,from=NORMAL;to=WEAK;busy=0.02;cca=0.012;pdr=0.4;err=0;noise=-94.3;rssi=-76.8;linkjam=3
+10390.063,DET_STATE,44,-1,from=NORMAL;to=WEAK;busy=0.02;cca=0.012;pdr=0.4;err=0.0556;noise=-94.3;rssi=-76.1;linkjam=3
 10393.084,DET_STATE,49,-1,from=WEAK;to=NORMAL;busy=0.016;cca=0.004;pdr=0.667;err=0.0417;noise=-96.5;rssi=-79;linkjam=0
 10396.728,DET_STATE,40,-1,from=WEAK;to=NORMAL;busy=0.032;cca=0.012;pdr=0.68;err=0;noise=-96.3;rssi=-74;linkjam=1
 10397.132,DET_STATE,4,-1,from=NORMAL;to=JAMMED;busy=0.488;cca=0.48;pdr=0.132;err=0.4;noise=-81;rssi=-69.3;linkjam=1
@@ -1016,7 +1016,7 @@ time_ms,event,node,seq,extra
 10481.740,DET_STATE,56,-1,from=NORMAL;to=WEAK;busy=0.008;cca=0;pdr=0.417;err=0;noise=-96.5;rssi=-82;linkjam=4
 10489.113,DET_STATE,31,-1,from=NORMAL;to=WEAK;busy=0.044;cca=0.028;pdr=0.476;err=0.143;noise=-93.1;rssi=-78;linkjam=4
 10489.863,DET_STATE,17,-1,from=NORMAL;to=WEAK;busy=0.0321;cca=0.012;pdr=0.471;err=0;noise=-95.9;rssi=-80.9;linkjam=0
-10490.063,DET_STATE,44,-1,from=WEAK;to=NORMAL;busy=0.016;cca=0.012;pdr=0.625;err=0;noise=-94.1;rssi=-78.9;linkjam=0
+10490.063,DET_STATE,44,-1,from=WEAK;to=NORMAL;busy=0.016;cca=0.012;pdr=0.625;err=0.0476;noise=-94.1;rssi=-78.5;linkjam=0
 10490.388,DET_STATE,20,-1,from=WEAK;to=JAMMED;busy=0.59;cca=0.578;pdr=0.25;err=0;noise=-87.2;rssi=-67.6;linkjam=0
 10490.388,JAM_DETECTED,20,-1,from=WEAK;to=JAMMED;busy=0.59;cca=0.578;pdr=0.25;err=0;noise=-87.2;rssi=-67.6;linkjam=0
 10492.610,DET_STATE,78,-1,from=WEAK;to=JAMMED;busy=0.608;cca=0.592;pdr=0.488;err=0.0741;noise=-91;rssi=-76.9;linkjam=2
@@ -1251,7 +1251,6 @@ time_ms,event,node,seq,extra
 12259.758,DET_STATE,67,-1,from=NORMAL;to=WEAK;busy=0.02;cca=0.012;pdr=0.429;err=0.0667;noise=-94.2;rssi=-78.6;linkjam=2
 12262.917,DET_STATE,34,-1,from=NORMAL;to=WEAK;busy=0.02;cca=0.012;pdr=0.346;err=0.133;noise=-94;rssi=-78.9;linkjam=2
 12289.863,DET_STATE,17,-1,from=NORMAL;to=WEAK;busy=0.012;cca=0;pdr=0.421;err=0;noise=-96.1;rssi=-72.4;linkjam=1
-12290.063,DET_STATE,44,-1,from=NORMAL;to=WEAK;busy=0.016;cca=0.012;pdr=0.462;err=0.3;noise=-93.5;rssi=-80.2;linkjam=1
 12293.084,DET_STATE,49,-1,from=NORMAL;to=WEAK;busy=0.012;cca=0.004;pdr=0.455;err=0;noise=-96.1;rssi=-76.6;linkjam=3
 12305.849,DET_STATE,18,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.008;pdr=0.526;err=0;noise=-96.3;rssi=-79.4;linkjam=0
 12318.800,DET_STATE,74,-1,from=WEAK;to=NORMAL;busy=0.0161;cca=0;pdr=0.556;err=0;noise=-95.9;rssi=-74;linkjam=1
@@ -1261,7 +1260,6 @@ time_ms,event,node,seq,extra
 12362.917,DET_STATE,34,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.008;pdr=0.5;err=0;noise=-94.2;rssi=-79.3;linkjam=0
 12377.876,DET_STATE,28,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.00402;pdr=0.583;err=0;noise=-96.7;rssi=-79.1;linkjam=0
 12389.863,DET_STATE,17,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.004;pdr=0.533;err=0;noise=-96;rssi=-71;linkjam=0
-12390.063,DET_STATE,44,-1,from=WEAK;to=NORMAL;busy=0.0241;cca=0.0161;pdr=0.714;err=0.167;noise=-92.9;rssi=-79.3;linkjam=0
 12393.084,DET_STATE,49,-1,from=WEAK;to=NORMAL;busy=0.016;cca=0.008;pdr=0.714;err=0;noise=-96.1;rssi=-75;linkjam=0
 12394.551,DET_STATE,71,-1,from=NORMAL;to=WEAK;busy=0.012;cca=0;pdr=0.357;err=0;noise=-96.6;rssi=-85.4;linkjam=2
 12446.734,DET_STATE,21,-1,from=NORMAL;to=JAMMED;busy=0.028;cca=0.02;pdr=0.464;err=0.35;noise=-93.6;rssi=-76.7;linkjam=0
@@ -1533,6 +1531,8 @@ time_ms,event,node,seq,extra
 14334.918,DET_STATE,43,-1,from=NORMAL;to=WEAK;busy=0.0321;cca=0.0201;pdr=0.474;err=0.188;noise=-93.4;rssi=-79.8;linkjam=1
 14381.740,DET_STATE,56,-1,from=NORMAL;to=WEAK;busy=0.00803;cca=0.00803;pdr=0.333;err=0;noise=-96.6;rssi=-79.8;linkjam=2
 14445.023,DET_STATE,57,-1,from=NORMAL;to=WEAK;busy=0.004;cca=0;pdr=0.278;err=0;noise=-96.7;rssi=-76.9;linkjam=3
+14490.063,DET_STATE,44,-1,from=NORMAL;to=JAMMED;busy=0.068;cca=0.052;pdr=0.462;err=0.538;noise=-92.3;rssi=-74;linkjam=1
+14490.063,JAM_DETECTED,44,-1,from=NORMAL;to=JAMMED;busy=0.068;cca=0.052;pdr=0.462;err=0.538;noise=-92.3;rssi=-74;linkjam=1
 14545.023,DET_STATE,57,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0;pdr=0.833;err=0;noise=-96.7;rssi=-79.7;linkjam=0
 14556.332,DET_STATE,55,-1,from=NORMAL;to=WEAK;busy=0.0524;cca=0.0282;pdr=0.483;err=0.0476;noise=-95.7;rssi=-73.6;linkjam=0
 14581.740,DET_STATE,56,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.00402;pdr=0.714;err=0;noise=-96.6;rssi=-78.6;linkjam=0
@@ -1566,8 +1566,6 @@ time_ms,event,node,seq,extra
 14956.129,DET_STATE,11,-1,from=JAMMED;to=WEAK;busy=0.04;cca=0.028;pdr=0.452;err=0.167;noise=-92.4;rssi=-71.4;linkjam=2
 14956.332,DET_STATE,55,-1,from=NORMAL;to=WEAK;busy=0.016;cca=0.008;pdr=0.467;err=0.0588;noise=-95.6;rssi=-78.7;linkjam=0
 14981.740,DET_STATE,56,-1,from=NORMAL;to=WEAK;busy=0.008;cca=0;pdr=0.267;err=0;noise=-96.7;rssi=-78.1;linkjam=2
-14990.063,DET_STATE,44,-1,from=NORMAL;to=JAMMED;busy=0.068;cca=0.068;pdr=0.462;err=0.333;noise=-91.9;rssi=-73.2;linkjam=1
-14990.063,JAM_DETECTED,44,-1,from=NORMAL;to=JAMMED;busy=0.068;cca=0.068;pdr=0.462;err=0.333;noise=-91.9;rssi=-73.2;linkjam=1
 14993.084,DET_STATE,49,-1,from=NORMAL;to=WEAK;busy=0.016;cca=0.004;pdr=0.444;err=0;noise=-95.9;rssi=-78.2;linkjam=3
 14999.513,DET_STATE,77,-1,from=NORMAL;to=WEAK;busy=0.016;cca=0.004;pdr=0.424;err=0.0625;noise=-95.1;rssi=-75;linkjam=3
 14999.644,DET_STATE,1,-1,from=NORMAL;to=WEAK;busy=0.004;cca=0;pdr=0.481;err=0;noise=-95.8;rssi=-77.5;linkjam=3

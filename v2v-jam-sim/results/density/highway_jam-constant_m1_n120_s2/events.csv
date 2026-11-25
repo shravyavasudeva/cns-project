@@ -1362,7 +1362,7 @@ time_ms,event,node,seq,extra
 33290.768,RX,75,22,lat_ms=119.73;path=DIRECT;hop=0;from=27;stale=1
 33300.000,GT_OFF,41,-1,jam_dbm=-92.05
 33435.361,DET_STATE,112,-1,from=NORMAL;to=WEAK;busy=0.185;cca=0.0444;pdr=0.2;err=0.0162;noise=-95.8;rssi=-61.2;linkjam=1
-33475.646,DET_STATE,105,-1,from=JAMMED;to=NORMAL;busy=0.297;cca=0.269;pdr=0.84;err=0.302;noise=-91.2;rssi=-75.1;linkjam=0
+33475.646,DET_STATE,105,-1,from=JAMMED;to=NORMAL;busy=0.301;cca=0.269;pdr=0.84;err=0.302;noise=-91.2;rssi=-75.1;linkjam=0
 33535.361,DET_STATE,112,-1,from=WEAK;to=NORMAL;busy=0.177;cca=0.0403;pdr=0.675;err=0.0207;noise=-95.8;rssi=-59.1;linkjam=2
 33600.000,GT_OFF,63,-1,jam_dbm=-92.08
 33752.952,DET_STATE,90,-1,from=NORMAL;to=WEAK;busy=0.137;cca=0.012;pdr=0.2;err=0.0138;noise=-95.7;rssi=-58.4;linkjam=1
@@ -1377,7 +1377,7 @@ time_ms,event,node,seq,extra
 34137.460,ALERT_TARGET,110,23,src=66;dist=112.7
 34137.460,ALERT_GEN,66,23,x=1174.22;y=2;jam_suspected=1;det_state=JAMMED
 34137.460,TX,66,23,path=DIRECT;hop=0;dst=bcast;bytes=108
-34144.437,DET_STATE,93,-1,from=JAMMED;to=NORMAL;busy=0.282;cca=0.246;pdr=0.982;err=0.196;noise=-91.6;rssi=-73.7;linkjam=0
+34144.437,DET_STATE,93,-1,from=JAMMED;to=NORMAL;busy=0.278;cca=0.242;pdr=0.982;err=0.196;noise=-91.6;rssi=-73.7;linkjam=0
 34148.565,DET_STATE,84,-1,from=NORMAL;to=WEAK;busy=0.192;cca=0.032;pdr=0.2;err=0.0138;noise=-95.8;rssi=-57.3;linkjam=3
 34157.460,REPEAT,66,23,rep=1
 34157.460,TX,66,23,path=DIRECT;hop=0;dst=bcast;bytes=108
@@ -1458,7 +1458,7 @@ time_ms,event,node,seq,extra
 36600.000,GT_OFF,42,-1,jam_dbm=-92.05
 36700.000,GT_OFF,110,-1,jam_dbm=-92.05
 36838.850,DET_STATE,19,-1,from=NORMAL;to=WEAK;busy=0.208;cca=0.02;pdr=0.2;err=0.00858;noise=-95.7;rssi=-58.9;linkjam=3
-36938.850,DET_STATE,19,-1,from=WEAK;to=NORMAL;busy=0.236;cca=0.032;pdr=0.546;err=0.00847;noise=-95.7;rssi=-56.7;linkjam=3
+36938.850,DET_STATE,19,-1,from=WEAK;to=NORMAL;busy=0.24;cca=0.036;pdr=0.546;err=0.00847;noise=-95.7;rssi=-56.7;linkjam=3
 37064.634,ALERT_TARGET,2,26,src=62;dist=198.4
 37064.634,ALERT_TARGET,7,26,src=62;dist=127.6
 37064.634,ALERT_TARGET,14,26,src=62;dist=24.39
@@ -1505,14 +1505,14 @@ time_ms,event,node,seq,extra
 38094.236,TX,2,27,path=DIRECT;hop=0;dst=bcast;bytes=108
 38114.236,REPEAT,2,27,rep=3
 38114.236,TX,2,27,path=DIRECT;hop=0;dst=bcast;bytes=108
-38118.793,DET_STATE,76,-1,from=NORMAL;to=WEAK;busy=0.188;cca=0.048;pdr=0.2;err=0.0118;noise=-95.8;rssi=-60.4;linkjam=1
+38118.793,DET_STATE,76,-1,from=NORMAL;to=WEAK;busy=0.184;cca=0.044;pdr=0.2;err=0.0195;noise=-95.8;rssi=-60.3;linkjam=1
 38134.236,REPEAT,2,27,rep=4
 38134.236,TX,2,27,path=DIRECT;hop=0;dst=bcast;bytes=108
 38300.215,DET_STATE,42,-1,from=JAMMED;to=NORMAL;busy=0.264;cca=0.232;pdr=0.9;err=0.129;noise=-91.5;rssi=-76;linkjam=0
-38318.793,DET_STATE,76,-1,from=WEAK;to=NORMAL;busy=0.173;cca=0.0241;pdr=0.783;err=0.00787;noise=-95.8;rssi=-55.5;linkjam=0
-38414.004,DET_STATE,110,-1,from=JAMMED;to=NORMAL;busy=0.278;cca=0.25;pdr=0.96;err=0.113;noise=-91.4;rssi=-76.2;linkjam=0
+38318.793,DET_STATE,76,-1,from=WEAK;to=NORMAL;busy=0.169;cca=0.0201;pdr=0.783;err=0.0158;noise=-95.8;rssi=-55.4;linkjam=0
+38414.004,DET_STATE,110,-1,from=JAMMED;to=NORMAL;busy=0.274;cca=0.246;pdr=0.96;err=0.113;noise=-91.4;rssi=-76.2;linkjam=0
 38902.814,DET_STATE,49,-1,from=NORMAL;to=WEAK;busy=0.236;cca=0.028;pdr=0.231;err=0.00803;noise=-95.8;rssi=-57.3;linkjam=5
-39002.814,DET_STATE,49,-1,from=WEAK;to=NORMAL;busy=0.228;cca=0.04;pdr=0.826;err=0.00803;noise=-95.8;rssi=-54.8;linkjam=0
+39002.814,DET_STATE,49,-1,from=WEAK;to=NORMAL;busy=0.22;cca=0.036;pdr=0.826;err=0.00803;noise=-95.8;rssi=-54.8;linkjam=0
 39137.556,ALERT_TARGET,7,28,src=2;dist=74.29
 39137.556,ALERT_TARGET,62,28,src=2;dist=194
 39137.556,ALERT_TARGET,68,28,src=2;dist=126.8

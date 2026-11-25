@@ -488,7 +488,7 @@ time_ms,event,node,seq,extra
 22277.089,DET_STATE,3,-1,from=WEAK;to=NORMAL;busy=0.0161;cca=0.00803;pdr=0.514;err=0.05;noise=-97;rssi=-82.7;linkjam=3
 22375.266,DET_STATE,63,-1,from=WEAK;to=NORMAL;busy=0.028;cca=0.008;pdr=0.5;err=0;noise=-96.9;rssi=-85.3;linkjam=3
 22604.806,DET_STATE,41,-1,from=WEAK;to=NORMAL;busy=0.016;cca=0.004;pdr=0.5;err=0;noise=-97;rssi=-81.6;linkjam=3
-22633.968,DET_STATE,26,-1,from=NORMAL;to=WEAK;busy=0.00803;cca=0.00402;pdr=0.467;err=0;noise=-97;rssi=-83.5;linkjam=1
+22633.968,DET_STATE,26,-1,from=NORMAL;to=WEAK;busy=0.012;cca=0.00803;pdr=0.467;err=0;noise=-97;rssi=-83.5;linkjam=1
 22676.939,DET_STATE,42,-1,from=WEAK;to=NORMAL;busy=0.0161;cca=0;pdr=0.5;err=0;noise=-97;rssi=-69.3;linkjam=1
 22777.089,DET_STATE,3,-1,from=NORMAL;to=WEAK;busy=0.008;cca=0.004;pdr=0.486;err=0;noise=-97;rssi=-78.3;linkjam=2
 23075.266,DET_STATE,63,-1,from=NORMAL;to=WEAK;busy=0.00803;cca=0;pdr=0.467;err=0;noise=-96.9;rssi=-83.2;linkjam=3

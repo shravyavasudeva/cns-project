@@ -1,5 +1,5 @@
 scenario,condition,det_tpr,det_fpr,det_delay_ms,share_normal,share_congested,share_weak,share_jammed
-highway,conf: congestion,,0.047,,0.014,0.939,0.0,0.047
+highway,conf: congestion,,0.047,,0.013,0.94,0.0,0.047
 highway,conf: interference,,0.0,,0.999,0.0,0.001,0.0
 highway,conf: weak,,0.0,,0.908,0.0,0.092,0.0
 highway,jam: constant,0.972,0.027,428.487,0.778,0.002,0.001,0.218

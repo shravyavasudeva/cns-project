@@ -15,6 +15,7 @@ Presets:
     density      vehicle density sweep per scenario, constant jammer   (108 runs)
     confounders  congestion / weak channel / interference, no jammer   (36 runs)
     rsu          with vs without RSUs, constant jammer                 (24 runs)
+    beaconrate   L4 beacon rate while jammed (2/5/10 Hz), constant jammer (27 runs)
     all          everything above except smoke
 
 Each run writes into  <out>/<preset>/<run-name>/ . Finished runs (node_summary.csv exists)
@@ -68,13 +69,18 @@ def preset_runs(name):
     if name == "rsu":
         return grid(scenario=["highway", "local"], rsu=[0, 1], jammer=["constant"],
                     mitigation=[2, 3], seed=[1, 2, 3])
+    if name == "beaconrate":
+        # Does L4's beacon slow-down (default 2 Hz while jammed) starve the detector?
+        return grid(scenario=SCENARIOS, jammer=["constant"], mitigation=[3],
+                    beaconHzJam=[2, 5, 10], seed=[1, 2, 3])
     raise SystemExit(f"unknown preset {name}")
 
 
 def run_name(flags):
-    order = ["scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower", "seed"]
+    order = ["scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower",
+             "beaconHzJam", "seed"]
     short = {"scenario": "", "jammer": "jam-", "confounder": "conf-", "mitigation": "m",
-             "vehicles": "n", "rsu": "rsu", "jamPower": "p", "seed": "s"}
+             "vehicles": "n", "rsu": "rsu", "jamPower": "p", "beaconHzJam": "bj", "seed": "s"}
     parts = [f"{short[k]}{flags[k]}" for k in order if k in flags]
     return "_".join(parts)
 
@@ -107,7 +113,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ns3", required=True, help="path to the ns-3.47 folder (contains ./ns3)")
     ap.add_argument("--preset", default="smoke",
-                    choices=["smoke", "sanity", "main", "density", "confounders", "rsu", "all"])
+                    choices=["smoke", "sanity", "main", "density", "confounders", "rsu", "beaconrate", "all"])
     ap.add_argument("--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2),
                     help="runs in parallel (default: half your CPU cores)")
     ap.add_argument("--out", default=os.path.join(HERE, "results"), help="results folder")
@@ -117,7 +123,7 @@ def main():
     args = ap.parse_args()
 
     ns3_dir = os.path.abspath(os.path.expanduser(args.ns3))
-    presets = ["sanity", "main", "density", "confounders", "rsu"] if args.preset == "all" else [args.preset]
+    presets = ["sanity", "main", "density", "confounders", "rsu", "beaconrate"] if args.preset == "all" else [args.preset]
 
     jobs = []
     for pr in presets:

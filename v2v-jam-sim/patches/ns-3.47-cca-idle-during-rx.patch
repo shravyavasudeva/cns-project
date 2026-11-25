@@ -1,0 +1,17 @@
+--- a/src/wifi/model/phy-entity.cc
++++ b/src/wifi/model/phy-entity.cc
+@@ -1342,7 +1342,13 @@
+         return;
+     }
+ 
+-    if (m_wifiPhy->IsStateCcaBusy())
++    // v2v-jam patch: do not end the CCA-busy period while a PPDU is still being received.
++    // After preamble detection the PHY stays in CCA_BUSY (not RX) until the payload starts.
++    // A weak or foreign signal arriving then triggers this re-check against the CCA-ED
++    // threshold only, which ignores the PPDU being decoded and switched the PHY to IDLE.
++    // The next PPDU then started a second reception and the InterferenceHelper aborted
++    // in CalculateNoiseInterferenceW() ("it == niIt->second.end()").
++    if (m_wifiPhy->IsStateCcaBusy() && !m_wifiPhy->m_currentEvent)
+     {
+         NS_LOG_DEBUG("Update CCA indication to IDLE");
+         m_state->SwitchMaybeToCcaBusy(Seconds(0), WIFI_CHANLIST_PRIMARY, {});

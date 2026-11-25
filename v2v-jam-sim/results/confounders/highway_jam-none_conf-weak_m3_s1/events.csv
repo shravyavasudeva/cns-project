@@ -1471,7 +1471,7 @@ time_ms,event,node,seq,extra
 27017.437,ALERT_GEN,3,16,x=796.274;y=-2;jam_suspected=0;det_state=WEAK
 27017.437,TX,3,16,path=DIRECT;hop=0;dst=bcast;bytes=108
 27017.723,RX,41,16,lat_ms=0.28605;path=DIRECT;hop=0;from=3;stale=0
-27052.621,DET_STATE,32,-1,from=WEAK;to=NORMAL;busy=0.008;cca=0;pdr=0.529;err=0;noise=-97;rssi=-76;linkjam=1
+27052.621,DET_STATE,32,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0.004;pdr=0.529;err=0;noise=-97;rssi=-76;linkjam=1
 27074.926,DET_STATE,0,-1,from=WEAK;to=NORMAL;busy=0.00402;cca=0;pdr=0.625;err=0;noise=-96.9;rssi=-77.1;linkjam=0
 27247.042,DET_STATE,27,-1,from=NORMAL;to=WEAK;busy=0.00803;cca=0.00402;pdr=0.4;err=0;noise=-97;rssi=-82.8;linkjam=2
 27278.062,DET_STATE,25,-1,from=WEAK;to=NORMAL;busy=0.012;cca=0;pdr=0.588;err=0;noise=-97;rssi=-84.9;linkjam=1
