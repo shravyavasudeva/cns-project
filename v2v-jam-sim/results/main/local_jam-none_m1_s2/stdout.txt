@@ -1,0 +1,3 @@
+v2v-jam: scenario=local jammer=none confounder=none mitigation=1 vehicles=12 seed=2 -> /home/shrav/cns-project/v2v-jam-sim/results/main/local_jam-none_m1_s2
+  802.11p channel 178: 5890 MHz, 10 MHz wide
+  done: 28 alerts generated

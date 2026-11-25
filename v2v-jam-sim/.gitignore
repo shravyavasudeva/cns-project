@@ -1,5 +1,5 @@
-results/
 *.gif
+!results/demo/*.gif
 *.mp4
 __pycache__/
 *.pyc

@@ -11,7 +11,7 @@ ECE 6612 course project, *Cross-Layer Resilience for Jammed V2V Safety Communica
 - Build: `cd ~/ns-3.47 && ./ns3 build`. Run: `./ns3 run "v2v-jam --flag=value ..."`. Show flags: `./ns3 run "v2v-jam --PrintHelp"`.
 - Configure (once): `./ns3 configure --build-profile=optimized --disable-werror --enable-modules="core;network;mobility;propagation;spectrum;wifi;netanim"`. Use `--build-profile=debug` when chasing crashes (enables NS_ASSERT / NS_LOG).
 - Python analysis: `pip install -r requirements.txt` (pandas, numpy, matplotlib, pillow).
-- Tested on **ns-3.40** (macOS, Apple clang 14): it builds cleanly and runs. It has not yet been built on ns-3.47, but its APIs were checked against the 3.47 headers. When fixing build errors, check the real signature in `~/ns-3.47/src/<module>/model/*.h` instead of guessing, and make the smallest fix.
+- Builds and runs cleanly on **ns-3.47** (WSL2, g++ 15.2; full batch run Nov 24, 2026, results in `results/`) and on **ns-3.40** (macOS, Apple clang 14). When fixing build errors, check the real signature in `~/ns-3.47/src/<module>/model/*.h` instead of guessing, and make the smallest fix.
 - ns-3.40 needs a one-line patch to run 10 MHz spectrum PHYs (`OfdmPhy::GetMeasurementChannelWidth` must return `min(channelWidth, 20)` instead of `20`, see README Troubleshooting). ns-3.47 already has it.
 - Detector design notes from testing:
   - Congestion and jamming are separated by *CCA_BUSY-only* time (non-frame energy) plus an elevated noise floor.
@@ -63,4 +63,4 @@ See **README.md → "Test results so far"** and **"Next steps"**. The README is 
 ## Don'ts
 - Don't log every beacon to `events.csv` (files explode). Aggregate in `stats.cc`.
 - Don't change the output file formats without updating `metrics.py`, `plots.py` and `README.md` together.
-- Don't commit `results/`, GIFs or ns-3 build folders.
+- `results/` holds the committed full-batch results (raw run folders, summaries, figures, demo GIFs) and `results/README.md` explains them. Re-run metrics/plots and update that README if you re-run experiments. Don't commit ns-3 build folders or other GIFs/videos.

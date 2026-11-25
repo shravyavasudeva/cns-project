@@ -1,0 +1,18 @@
+v2v-jam: scenario=highway jammer=none confounder=congestion mitigation=0 vehicles=60 seed=2 -> /home/shrav/cns-project/v2v-jam-sim/results/confounders/highway_jam-none_conf-congestion_m0_s2
+  802.11p channel 178: 5890 MHz, 10 MHz wide
+aborted. cond="it == niIt->second.end(), +8.593622365s 7 file=/home/shrav/ns-3.47/src/wifi/model/interference-helper.cc, line=465
+NS_FATAL, terminating
+   0# ns3::InterferenceHelper::CalculateNoiseInterferenceW(ns3::Ptr<ns3::Event>, std::map<ns3::WifiSpectrumBandInfo, std::multimap<ns3::Time, ns3::InterferenceHelper::NiChange, std::less<ns3::Time>, std::allocator<std::pair<ns3::Time const, ns3::InterferenceHelper::NiChange> > >, std::less<ns3::WifiSpectrumBandInfo>, std::allocator<std::pair<ns3::WifiSpectrumBandInfo const, std::multimap<ns3::Time, ns3::InterferenceHelper::NiChange, std::less<ns3::Time>, std::allocator<std::pair<ns3::Time const, ns3::InterferenceHelper::NiChange> > > > > >&, ns3::WifiSpectrumBandInfo const&) const at :0
+   1# ns3::InterferenceHelper::CalculatePayloadSnrPer(ns3::Ptr<ns3::Event>, double, ns3::WifiSpectrumBandInfo const&, unsigned short, std::pair<ns3::Time, ns3::Time>) const at :0
+   2# ns3::PhyEntity::GetReceptionStatus(ns3::Ptr<ns3::WifiMpdu>, ns3::Ptr<ns3::Event>, unsigned short, ns3::Time, ns3::Time) at :0
+   3# ns3::PhyEntity::EndOfMpdu(ns3::Ptr<ns3::Event>, ns3::Ptr<ns3::WifiMpdu>, unsigned long, ns3::Time, ns3::Time) at :0
+   4# std::_Function_handler<void (), std::_Bind<void (ns3::PhyEntity::*(ns3::PhyEntity*, ns3::Ptr<ns3::Event>, ns3::Ptr<ns3::WifiMpdu>, unsigned long, ns3::Time, ns3::Time))(ns3::Ptr<ns3::Event>, ns3::Ptr<ns3::WifiMpdu>, unsigned long, ns3::Time, ns3::Time)> >::_M_invoke(std::_Any_data const&) at :0
+   5# ns3::DefaultSimulatorImpl::ProcessOneEvent() [clone .localalias] at :0
+   6# ns3::DefaultSimulatorImpl::Run() [clone .localalias] at :0
+   7# main at :0
+   8#      at :0
+   9# __libc_start_main at :0
+  10# _start at :0
+  11# 
+
+terminate called without an active exception

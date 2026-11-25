@@ -1,0 +1,16 @@
+scenario,condition,det_tpr,det_fpr,det_delay_ms,share_normal,share_congested,share_weak,share_jammed
+highway,conf: congestion,,0.047,,0.014,0.939,0.0,0.047
+highway,conf: interference,,0.0,,0.999,0.0,0.001,0.0
+highway,conf: weak,,0.0,,0.908,0.0,0.092,0.0
+highway,jam: constant,0.972,0.027,428.487,0.778,0.002,0.001,0.218
+highway,jam: none,,0.0,,0.999,0.0,0.001,0.0
+highway,jam: reactive,0.228,0.0,5102.584,0.953,0.0,0.001,0.046
+local,conf: congestion,,0.0,,0.999,0.0,0.0,0.0
+local,conf: interference,,0.0,,1.0,0.0,0.0,0.0
+local,conf: weak,,0.001,,0.831,0.0,0.168,0.001
+local,jam: constant,0.888,0.034,519.167,0.669,0.0,0.001,0.33
+local,jam: none,,0.0,,1.0,0.0,0.0,0.0
+local,jam: reactive,0.329,0.0,3729.333,0.887,0.0,0.0,0.113
+urban,jam: constant,0.979,0.029,328.723,0.747,0.001,0.008,0.244
+urban,jam: none,,0.0,,0.991,0.0,0.009,0.0
+urban,jam: reactive,0.398,0.004,3573.685,0.899,0.0,0.007,0.093

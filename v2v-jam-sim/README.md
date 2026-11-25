@@ -4,7 +4,7 @@
 
 This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.11p while an RF jammer attacks the channel. It asks one question: **does adding Layer 3 rerouting (via an RSU or relay vehicle) and Layer 4 deadline/priority handling on top of PHY/MAC jamming detection get emergency alerts to nearby vehicles in time, and how does the answer change between a highway, a local road and an urban intersection?**
 
-> **Status (Nov 3, 2026):** built and tested on **ns-3.40** (macOS, Apple clang 14). It builds with no errors or warnings, and the smoke, sanity and per-configuration check runs complete with sensible results. It has **not been built on ns-3.47 yet**. All APIs used were checked against the 3.47 source, so it should build, but report any compile error (see [Troubleshooting](#troubleshooting)).
+> **Status (Nov 24, 2026):** built and run on **ns-3.47** (WSL2, Ubuntu, g++ 15.2) with no code changes. The **full experiment batch** (`--preset all`, 360 runs + smoke + demo) is done. Results, figures and a detailed explanation are in **[`results/README.md`](results/README.md)**. Earlier testing was on ns-3.40 (macOS).
 >
 > **ns-3.40 only:** 3.40 has a bug that crashes any 10 MHz (802.11p) spectrum PHY (`interference-helper.cc line 337`). ns-3.47 fixed it. If you must use 3.40, apply the one-line fix described in [Troubleshooting](#troubleshooting).
 
@@ -12,34 +12,39 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 
 ## Test results so far
 
-Measured on ns-3.40 with the default settings (highway unless noted), **one seed per run**. Treat these as a first look, not final results.
+**Full batch on ns-3.47** (5 seeds for `main`, 3 for the other presets). The complete analysis is in [`results/README.md`](results/README.md).
 
 | Check | Result |
 |---|---|
-| Build | Clean: no errors or warnings |
-| Jammer sanity (`sanity` preset) | Beacon PDR falls from 1.00 to 0.50 as jammer power rises from −10 to 30 dBm. Near the jammer (< 50 m) PDR is 0.08, and beyond about 600 m it is unaffected. ✅ The jammer really hurts |
-| Detector, constant jammer | Catches 96% of truly-jammed samples (TPR 0.96), 2% false alarms (FPR 0.02) |
-| Detector, reactive jammer | TPR 0.26: harder to detect (stealthier attack) |
-| Detector, confounders | Congestion, weak channel, interference: false alarms ≤ 0.5%. Correctly labelled CONGESTED / WEAK |
-| On-time alert reachability, constant jammer, mitigation 0 → 1 → 2 → 3 | Highway 0.50 → 0.53 → 0.52 → **0.56**. Local road 0.55 → 0.55 → 0.55 → **0.56** |
-| Layer 3 on the local road | No relay or RSU available for **89%** of alerts (mitigation 2). Sparse roads leave little to reroute through |
-| Layer 4 | Stale alerts accepted: 3.5% without L4 → **0%** with L4 |
-| Runtime | 10–25 s per default highway run on a laptop (congestion runs about 45 s) |
+| Build on ns-3.47 | Clean, no code changes needed |
+| Jammer sanity (`sanity` preset) | Beacon PDR falls 0.997 → 0.506 as jammer power rises from −10 to 30 dBm. Near the jammer (< 50 m) PDR is 0.08; beyond about 600 m it is unaffected. ✅ |
+| Detector, constant jammer | TPR 0.97 / 0.89 / 0.98 (highway / local / urban), FPR ≤ 3.4%, delay 330–520 ms |
+| Detector, reactive jammer | TPR 0.23–0.40, delay 3.6–5.1 s: the stealthier attack is hard to detect |
+| Detector, confounders | False alarms ≤ 4.7% (highway congestion); correctly labelled CONGESTED / WEAK |
+| On-time alert reachability, constant jammer, mitigation 0 → 3 | Highway 0.48 → **0.57**, local 0.50 → **0.53**, urban 0.28 → **0.32**. Better on every seed (paired) |
+| Same, reactive jammer | Highway 0.55 → 0.58, local 0.51 → 0.53, urban 0.34 → 0.40 |
+| Layer 3 | NO_RELAY: local **80%**, highway 39%, urban 3%. L3 helps most in urban (RSU at the intersection), nothing on the local road |
+| Layer 4 | Stale alerts accepted → **0%** everywhere. Jammed highway alert latency 20 ms → **3 ms** (p95 45 → 9 ms) |
+| Density | Highway: unmitigated 0.61 → 0.40 from 30 → 120 vehicles; full mitigation holds about 0.60 |
+| Runtime | 5–60 s per run on a laptop; full batch about 2 h with 2 parallel jobs |
 
 **Things to watch / discuss in the report:**
-- **Mitigation gains are modest.** Vehicles deep inside the jammer's range cannot decode anything, whoever sends the alert. Rerouting only helps vehicles near the edge of the jammed area. Check whether this holds across seeds, densities and jammer positions.
-- **L4 slows down detection.** At mitigation 3, L4 lowers the beacon rate to 2 Hz while jamming, so the detector has fewer frames to judge from. On the local road its TPR dropped from 0.97 to 0.39. Consider testing `--beaconHzJam=5` or `10` to measure this trade-off.
+- **Mitigation gains are modest.** Vehicles deep inside the jammer's range cannot decode anything. Rerouting only helps near the edge of the jammed area.
+- **L4 slows down detection.** At mitigation 3, L4 lowers the beacon rate to 2 Hz while jamming. TPR drops 0.89 → 0.51 (local) and 0.98 → 0.69 (urban). Test `--beaconHzJam=5` or `10`.
+- **Urban baseline is 0.70 without a jammer** (path-loss exponent 3.0 vs a fixed 200 m target radius). Compare urban jammed results against 0.70.
+- **Highway without an RSU never finds a relay vehicle** (NO_RELAY 100% in the `rsu` preset). Worth checking the relay filter.
+- **One run crashes inside ns-3.47** (`confounders/highway_jam-none_conf-congestion_m0_s2`, interference-helper assertion, deterministic). See `results/README.md` §7.1.
 - **Two code changes from testing are already included:**
   - The detector separates jamming from congestion by *CCA_BUSY-only* time (non-frame energy) plus an elevated noise floor.
   - Beacons advertise only a node's *own* jamming detection. Earlier, suspicion spread node to node and caused network-wide false alarms.
 
 ## Next steps
 
-1. **Build on ns-3.47** (§3) and run the smoke test. Report any compile error. The code was checked against the 3.47 source but has only been compiled on 3.40.
-2. **Run `sanity`** and confirm the two sanity plots look like the results above.
-3. **Run `--preset all`** (360 runs). You can split presets across laptops and merge the `results/` folders (§5).
-4. **Calibrate the detector** (§10), then re-run the presets if the thresholds change.
-5. **Make the figures** (`analysis/plots.py`) and write the report sections.
+1. ~~Build on ns-3.47~~ ✅ · ~~Run `sanity`~~ ✅ · ~~Run `--preset all`~~ ✅ · ~~Make the figures~~ ✅ (all in `results/`)
+2. **Detector vs L4 trade-off:** rerun mitigation 3 with `--beaconHzJam=5` / `10`.
+3. **Calibrate the detector** for reactive jammers (§10), then re-run the presets if the thresholds change.
+4. Check the highway relay selection without an RSU, and decide on the urban target radius.
+5. Write the report sections using `results/README.md` and `results/figures/`.
 
 ## Contents
 - [Test results so far](#test-results-so-far) · [Next steps](#next-steps)

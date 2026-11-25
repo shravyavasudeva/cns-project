@@ -1,0 +1,3 @@
+v2v-jam: scenario=highway jammer=constant confounder=none mitigation=0 vehicles=30 seed=3 -> /home/shrav/cns-project/v2v-jam-sim/results/density/highway_jam-constant_m0_n30_s3
+  802.11p channel 178: 5890 MHz, 10 MHz wide
+  done: 28 alerts generated

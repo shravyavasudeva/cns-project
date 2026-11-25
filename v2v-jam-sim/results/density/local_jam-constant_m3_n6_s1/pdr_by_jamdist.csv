@@ -1,0 +1,17 @@
+dist_m,phase,expected,received,pdr
+0,before,385,385,1
+50,before,421,418,0.992874
+100,before,332,332,1
+150,before,194,194,1
+200,before,103,103,1
+250,before,62,62,1
+0,during,190,11,0.0578947
+50,during,269,67,0.249071
+100,during,267,138,0.516854
+150,during,200,133,0.665
+200,during,130,92,0.707692
+250,during,69,65,0.942029
+300,during,81,81,1
+350,during,79,79,1
+400,during,81,81,1
+450,during,47,47,1

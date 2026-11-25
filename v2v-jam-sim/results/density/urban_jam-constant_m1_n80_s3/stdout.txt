@@ -1,0 +1,3 @@
+v2v-jam: scenario=urban jammer=constant confounder=none mitigation=1 vehicles=80 seed=3 -> /home/shrav/cns-project/v2v-jam-sim/results/density/urban_jam-constant_m1_n80_s3
+  802.11p channel 178: 5890 MHz, 10 MHz wide
+  done: 28 alerts generated
