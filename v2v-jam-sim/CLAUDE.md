@@ -18,6 +18,7 @@ ECE 6612 course project, *Cross-Layer Resilience for Jammed V2V Safety Communica
   - Congestion and jamming are separated by *CCA_BUSY-only* time (non-frame energy) plus an elevated noise floor.
   - Beacons advertise only *local* jamming (`LocalJammed()`), never `JamSuspected()`. Advertising suspicion caused network-wide false alarms.
   - Neighbours predicted off the road (wrap-around) are ignored for link-jam evidence.
+  - L3 never relays through a vehicle that is itself jammed (`relay.cc`). `--relayEdge=1` (default 0, used only by the `edgerelay` preset) allows jammed vehicles nearer the zone edge. Tested Nov 25: it doesn't help and hurts without L4, so keep the default.
 
 ## Current status
 See **README.md → "Test results so far"** and **"Next steps"**. The README is the single place for team-facing status. Keep it updated when something important changes (e.g. the first ns-3.47 build, detector calibration, the full batch run).

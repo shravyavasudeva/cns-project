@@ -72,9 +72,17 @@ Router::Choose(Pending& pd, uint32_t& via, bool& isRsu, double& score)
             continue;
         if (now - n.lastHeard > MilliSeconds(500) || n.rssi < p.relayMinRssi)
             continue;
-        if (n.reportsJam || m_det->IsLinkJammed(id))
-            continue; // it is itself inside the jammed area
         Vector q = NeighborTable::PredictPos(n, now);
+        if (n.reportsJam || m_det->IsLinkJammed(id))
+        {
+            // It is itself inside the jammed area. By default skip it. With --relayEdge=1,
+            // accept it if it is clearly nearer the edge of the zone than we are: its
+            // re-broadcast can then reach vehicles beyond the edge (one hop outwards).
+            bool nearerEdge = p.relayEdge && haveCenter &&
+                              Dist2D(q, jc) >= Dist2D(me, jc) + p.relayEdgeMargin;
+            if (!nearerEdge)
+                continue;
+        }
 
         double quality = std::clamp((n.rssi - p.relayMinRssi) / 25.0, 0.0, 1.0);
         double away = haveCenter ? std::clamp(Dist2D(q, jc) / 300.0, 0.0, 1.0) : 0.5;

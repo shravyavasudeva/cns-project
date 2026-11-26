@@ -4,7 +4,7 @@
 
 This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.11p while an RF jammer attacks the channel. It asks one question: **does adding Layer 3 rerouting (via an RSU or relay vehicle) and Layer 4 deadline/priority handling on top of PHY/MAC jamming detection get emergency alerts to nearby vehicles in time, and how does the answer change between a highway, a local road and an urban intersection?**
 
-> **Status (Nov 25, 2026):** built and run on **ns-3.47** (WSL2, Ubuntu, g++ 15.2) **with our one-line ns-3 bug fix** ([`patches/`](patches/README.md): run `bash scripts/apply_ns3_patch.sh` once). The **full experiment batch** (`--preset all`, 387 runs + smoke + demo) completed with no failures. Results, figures and a detailed explanation are in **[`results/README.md`](results/README.md)**. Earlier testing was on ns-3.40 (macOS).
+> **Status (Nov 25, 2026):** built and run on **ns-3.47** (WSL2, Ubuntu, g++ 15.2) **with our one-line ns-3 bug fix** ([`patches/`](patches/README.md): run `bash scripts/apply_ns3_patch.sh` once). The **full experiment batch** (`--preset all`, 471 runs + smoke + demo) completed with no failures. Results, figures and a detailed explanation are in **[`results/README.md`](results/README.md)**. Earlier testing was on ns-3.40 (macOS).
 >
 > **ns-3.40 only:** 3.40 has a bug that crashes any 10 MHz (802.11p) spectrum PHY (`interference-helper.cc line 337`). ns-3.47 fixed it. If you must use 3.40, apply the one-line fix described in [Troubleshooting](#troubleshooting).
 
@@ -16,7 +16,7 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 
 | Check | Result |
 |---|---|
-| Build on ns-3.47 | Clean. ns-3.47 itself needed a one-line bug fix (`patches/`); 387/387 runs complete |
+| Build on ns-3.47 | Clean. ns-3.47 itself needed a one-line bug fix (`patches/`); 471/471 runs complete |
 | Jammer sanity (`sanity` preset) | Beacon PDR falls 0.997 → 0.506 as jammer power rises from −10 to 30 dBm. Near the jammer (< 50 m) PDR is 0.08; beyond about 600 m it is unaffected. ✅ |
 | Detector, constant jammer | TPR 0.97 / 0.89 / 0.98 (highway / local / urban), FPR ≤ 3.4%, delay 330–520 ms |
 | Detector, reactive jammer | TPR 0.23–0.40, delay 3.6–5.1 s: the stealthier attack is hard to detect |
@@ -32,8 +32,8 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 **Things to watch / discuss in the report:**
 - **Mitigation gains are modest.** Vehicles deep inside the jammer's range cannot decode anything. Rerouting only helps near the edge of the jammed area.
 - **L4 slows down detection.** At mitigation 3, L4 lowers the beacon rate to 2 Hz while jamming. TPR drops 0.89 → 0.51 (local) and 0.98 → 0.69 (urban). The `beaconrate` preset shows 5 Hz fixes urban for free; the local road needs 10 Hz, which hurts the highway (`results/README.md` §5.8). **Team decision:** default rate, or density-adaptive.
-- **Urban baseline is 0.70 without a jammer** (path-loss exponent 3.0 vs a fixed 200 m target radius). Compare urban jammed results against 0.70.
-- **Highway without an RSU never finds a relay vehicle** (NO_RELAY 100% in the `rsu` preset). By design, `relay.cc` rejects neighbours that are themselves jammed, and alert sources are within 250 m of a jammer that reaches about 600 m, so every neighbour a source can hear is jammed. Only the RSU's wired backhaul escapes. **Team decision:** keep it (a legitimate finding), or allow jammed neighbours closer to the zone edge (multi-hop escape).
+- **Urban baseline is 0.70 without a jammer** (path-loss exponent 3.0 vs a fixed 200 m target radius). **Tested** (`urbanradius`): with a 150 m radius the baseline is 0.98, and jammed results and mitigation gains keep the same pattern relative to the baseline.
+- **Highway without an RSU never finds a relay vehicle** (NO_RELAY 100% in the `rsu` preset). By design, `relay.cc` rejects neighbours that are themselves jammed, and alert sources are within 250 m of a jammer that reaches about 600 m, so every neighbour a source can hear is jammed. Only the RSU's wired backhaul escapes. **Tested** (`edgerelay`, `--relayEdge=1`): letting jammed vehicles nearer the zone edge relay finds a relay for about 40% of alerts, but on-time delivery gets *worse* without L4 (−0.06 to −0.08, latency 13 → 51 ms) and is unchanged with L4. The default (no jammed relays) is kept.
 - **ns-3.47 bug fixed.** The Nov 24 batch had one run abort inside ns-3 (`interference-helper.cc:465`). Root cause and one-line fix in [`patches/README.md`](patches/README.md). It changes results by ≤ 0.03 per run.
 - **Two code changes from testing are already included:**
   - The detector separates jamming from congestion by *CCA_BUSY-only* time (non-frame energy) plus an elevated noise floor.
@@ -44,7 +44,7 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 1. ~~Build on ns-3.47~~ ✅ · ~~Run `sanity`~~ ✅ · ~~Run `--preset all`~~ ✅ · ~~Make the figures~~ ✅ · ~~Fix the ns-3.47 crash~~ ✅ (all in `results/`)
 2. ~~Detector vs L4 trade-off~~ ✅ (`beaconrate` preset). Decide the jammed beacon rate (2 / 5 Hz / density-adaptive).
 3. **Calibrate the detector** for reactive jammers (§10), then re-run the presets if the thresholds change.
-4. Check the highway relay selection without an RSU, and decide on the urban target radius.
+4. ~~Highway relay selection without an RSU~~ ✅ and ~~urban target radius~~ ✅ both tested (`results/README.md` §5.9–5.10).
 5. Write the report sections using `results/README.md` and `results/figures/`.
 
 ## Contents
@@ -80,7 +80,7 @@ This is an ns-3 simulation of vehicles exchanging safety messages over IEEE 802.
 | L4 handling | Priority queue (EMERGENCY before ROUTINE). Messages are released to the radio only when it is idle. Stale messages are dropped at the sender, relay and receiver. Beacon rate drops to 2 Hz while jamming is suspected |
 | Ground truth | Every 0.1 s, each node is labelled "jammed" if the jammer power there is ≥ −92 dBm. Used to score the detector (TPR, FPR, delay) |
 | Metrics | Reachability, deadline-miss ratio, stale-accept ratio, latency/p95/jitter, NO_RELAY rate, relay success, route recovery time, route breaks, path switches, routing overhead, beacon PDR, goodput, connection interruption time, detector accuracy |
-| Tooling | One program with flags, a batch runner with 7 presets (388 runs incl. smoke), metrics and plot scripts, a GIF demo animation, and an optional NetAnim trace |
+| Tooling | One program with flags, a batch runner with 9 presets (472 runs incl. smoke), metrics and plot scripts, a GIF demo animation, and an optional NetAnim trace |
 
 ### The four mitigation configurations (`--mitigation`)
 Each level adds to the one before it, so the results show what each layer contributes:
@@ -251,7 +251,7 @@ cd ~/cns-project/v2v-jam-sim
 python3 run_batch.py --ns3 ~/ns-3.47 --preset smoke            # 1 run, checks everything works
 python3 run_batch.py --ns3 ~/ns-3.47 --preset sanity --jobs 4  # do this FIRST (see below)
 python3 run_batch.py --ns3 ~/ns-3.47 --preset main   --jobs 4
-python3 run_batch.py --ns3 ~/ns-3.47 --preset all    --jobs 4  # everything (387 runs)
+python3 run_batch.py --ns3 ~/ns-3.47 --preset all    --jobs 4  # everything (471 runs)
 python3 run_batch.py --ns3 ~/ns-3.47 --preset main --dry-run   # only print the commands
 ```
 
@@ -264,6 +264,8 @@ python3 run_batch.py --ns3 ~/ns-3.47 --preset main --dry-run   # only print the 
 | `confounders` | {congestion, weak, interference} × {highway, local} × mitigation {0,3} × 3 seeds, no jammer | 36 |
 | `rsu` | RSU {0,1} × {highway, local} × mitigation {2,3} × 3 seeds, constant jammer | 24 |
 | `beaconrate` | L4 beacon rate while jammed `--beaconHzJam` {2,5,10} × scenario × 3 seeds, constant jammer, mitigation 3 | 27 |
+| `urbanradius` | same as `main` for urban only, but alert target radius 150 m (`--alertRadius=150`) | 60 |
+| `edgerelay` | same as `rsu`, but with `--relayEdge=1` (jammed vehicles nearer the zone edge may relay) | 24 |
 
 - Results go to `results/<preset>/<run-name>/`.
 - **Finished runs are skipped**, so you can stop with Ctrl+C and restart later.
@@ -304,7 +306,7 @@ python3 analysis/plots.py   --results results    # → results/figures/*.png, de
 | share_normal/congested/weak/jammed | how the detector classified the channel (shows confounder confusion) |
 
 ### Figures produced
-`sanity_pdr_vs_power`, `sanity_pdr_vs_distance`, `ontime_by_config`, `deadline_miss_by_config`, `latency_by_config`, `beacon_pdr_by_config`, `routing_by_scenario`, `ontime_vs_density`, `rsu_effect`, `beacon_rate`, `detector_states`, plus `detector_accuracy.csv`.
+`sanity_pdr_vs_power`, `sanity_pdr_vs_distance`, `ontime_by_config`, `deadline_miss_by_config`, `latency_by_config`, `beacon_pdr_by_config`, `routing_by_scenario`, `ontime_vs_density`, `rsu_effect`, `beacon_rate`, `urban_radius`, `edge_relay`, `detector_states`, plus `detector_accuracy.csv`.
 
 ---
 
@@ -379,7 +381,7 @@ Receiver: first copy → RX (latency, path, stale flag). With mitigation 3, a st
 - `LinkLifetime()` computes how long two moving nodes stay within range.
 
 ### `relay.h/.cc`: Layer 3 (`Router`)
-- **Candidate order:** RSUs heard in the last second with RSSI ≥ −88 dBm come first. Then relay vehicles heard in the last 0.5 s, not reporting jamming and not on a jammed link.
+- **Candidate order:** RSUs heard in the last second with RSSI ≥ −88 dBm come first. Then relay vehicles heard in the last 0.5 s, not reporting jamming and not on a jammed link. With `--relayEdge=1`, a jammed vehicle is still allowed if it is at least `--relayEdgeMargin` (50 m) farther from the estimated jam centre than the source (used only in the `edgerelay` experiment).
 - **Relay score:** `0.4·quality + 0.3·distance-from-jammed-area + 0.3·link-lifetime`.
 - **Implicit ACK:** if the source overhears the relayed copy within 15 ms, it logs `RELAY_OK`. Otherwise it logs `ROUTE_BREAK` and `PATH_SWITCH`, then tries the next candidate (at most 3 switches, never past the deadline).
 
@@ -430,6 +432,7 @@ Run `./ns3 run "v2v-jam --PrintHelp"` for the authoritative list. The most impor
 | `--beaconHz`, `--beaconHzJam` | 10, 2 | beacon rate normal / jammed (level 3) |
 | detector: `--detWindow --detPeriod --edBusyThr --congBusyThr --ccaJamThr --pdrThr --errThr --noiseThr --linkRange --minLinkJam --enterCount --exitCount` | see `common.h` | detector thresholds |
 | routing: `--ackTimeoutMs --maxSwitches --backhaulMs --relayMinRssi` | 15, 3, 2, −88 | L3 parameters |
+| `--relayEdge`, `--relayEdgeMargin` | 0, 50 | 1 = a relay vehicle that is itself jammed may still be chosen if it is at least `relayEdgeMargin` m farther from the estimated jam centre than the source (one hop towards the zone edge). 0 = jammed vehicles never relay (the design used in all main results) |
 | `--posLog`, `--anim` | false | write positions.csv / NetAnim anim.xml |
 
 ---

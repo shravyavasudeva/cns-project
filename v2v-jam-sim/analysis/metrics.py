@@ -40,7 +40,8 @@ import sys
 import numpy as np
 import pandas as pd
 
-GROUP_KEYS = ["preset", "scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower", "beaconHzJam"]
+GROUP_KEYS = ["preset", "scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower", "beaconHzJam",
+              "alertRadius", "relayEdge"]
 
 
 def parse_extra(s):
@@ -73,6 +74,8 @@ def run_metrics(run_dir):
                                   "rsu", "jamPower", "seed", "speed", "simTime"]}
     # beaconHzJam was added to params.json later; older runs used the default of 2 Hz
     m["beaconHzJam"] = prm.get("beaconHzJam", 2)
+    m["alertRadius"] = prm.get("alertRadius", 200)
+    m["relayEdge"] = prm.get("relayEdge", 0)  # added later; older runs had no edge relays
     m["run_dir"] = run_dir
 
     # ------------------------------- alerts -------------------------------

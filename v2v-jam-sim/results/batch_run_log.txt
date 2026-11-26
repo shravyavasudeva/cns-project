@@ -428,3 +428,93 @@ wrote results/figures/beacon_rate.png
 wrote results/figures/detector_accuracy.csv
 wrote results/figures/detector_states.png
 == finished Wed Nov 25 16:54:38 EST 2026, 69 min ==
+== Wed Nov 25 17:12:14 EST 2026 urbanradius + edgerelay on patched ns-3.47 ==
+60 runs in preset(s) ['urbanradius'], 0 already done, 60 to run
+[1/60] urbanradius/urban_jam-none_m0_r150_s2  7s  ok
+[2/60] urbanradius/urban_jam-none_m0_r150_s1  8s  ok
+[3/60] urbanradius/urban_jam-none_m0_r150_s4  7s  ok
+[4/60] urbanradius/urban_jam-none_m0_r150_s3  7s  ok
+[5/60] urbanradius/urban_jam-none_m0_r150_s5  7s  ok
+[6/60] urbanradius/urban_jam-none_m1_r150_s1  7s  ok
+[7/60] urbanradius/urban_jam-none_m1_r150_s2  7s  ok
+[8/60] urbanradius/urban_jam-none_m1_r150_s3  8s  ok
+[9/60] urbanradius/urban_jam-none_m1_r150_s4  7s  ok
+[10/60] urbanradius/urban_jam-none_m1_r150_s5  7s  ok
+[11/60] urbanradius/urban_jam-none_m2_r150_s1  7s  ok
+[12/60] urbanradius/urban_jam-none_m2_r150_s2  7s  ok
+[13/60] urbanradius/urban_jam-none_m2_r150_s3  8s  ok
+[14/60] urbanradius/urban_jam-none_m2_r150_s4  8s  ok
+[15/60] urbanradius/urban_jam-none_m2_r150_s5  7s  ok
+[16/60] urbanradius/urban_jam-none_m3_r150_s1  7s  ok
+[17/60] urbanradius/urban_jam-none_m3_r150_s2  7s  ok
+[18/60] urbanradius/urban_jam-none_m3_r150_s3  8s  ok
+[19/60] urbanradius/urban_jam-none_m3_r150_s4  7s  ok
+[20/60] urbanradius/urban_jam-none_m3_r150_s5  7s  ok
+[21/60] urbanradius/urban_jam-constant_m0_r150_s1  7s  ok
+[22/60] urbanradius/urban_jam-constant_m0_r150_s2  7s  ok
+[23/60] urbanradius/urban_jam-constant_m0_r150_s3  7s  ok
+[24/60] urbanradius/urban_jam-constant_m0_r150_s4  7s  ok
+[25/60] urbanradius/urban_jam-constant_m0_r150_s5  8s  ok
+[26/60] urbanradius/urban_jam-constant_m1_r150_s1  8s  ok
+[27/60] urbanradius/urban_jam-constant_m1_r150_s2  8s  ok
+[28/60] urbanradius/urban_jam-constant_m1_r150_s3  8s  ok
+[29/60] urbanradius/urban_jam-constant_m1_r150_s4  7s  ok
+[30/60] urbanradius/urban_jam-constant_m1_r150_s5  7s  ok
+[31/60] urbanradius/urban_jam-constant_m2_r150_s1  9s  ok
+[32/60] urbanradius/urban_jam-constant_m2_r150_s2  9s  ok
+[33/60] urbanradius/urban_jam-constant_m2_r150_s3  10s  ok
+[34/60] urbanradius/urban_jam-constant_m2_r150_s4  10s  ok
+[35/60] urbanradius/urban_jam-constant_m3_r150_s1  5s  ok
+[36/60] urbanradius/urban_jam-constant_m2_r150_s5  7s  ok
+[37/60] urbanradius/urban_jam-constant_m3_r150_s2  5s  ok
+[38/60] urbanradius/urban_jam-constant_m3_r150_s3  5s  ok
+[39/60] urbanradius/urban_jam-constant_m3_r150_s4  5s  ok
+[40/60] urbanradius/urban_jam-constant_m3_r150_s5  5s  ok
+[41/60] urbanradius/urban_jam-reactive_m0_r150_s1  8s  ok
+[42/60] urbanradius/urban_jam-reactive_m0_r150_s2  8s  ok
+[43/60] urbanradius/urban_jam-reactive_m0_r150_s3  9s  ok
+[44/60] urbanradius/urban_jam-reactive_m0_r150_s4  8s  ok
+[45/60] urbanradius/urban_jam-reactive_m0_r150_s5  8s  ok
+[46/60] urbanradius/urban_jam-reactive_m1_r150_s1  9s  ok
+[47/60] urbanradius/urban_jam-reactive_m1_r150_s2  8s  ok
+[48/60] urbanradius/urban_jam-reactive_m1_r150_s3  8s  ok
+[49/60] urbanradius/urban_jam-reactive_m1_r150_s4  8s  ok
+[50/60] urbanradius/urban_jam-reactive_m1_r150_s5  8s  ok
+[51/60] urbanradius/urban_jam-reactive_m2_r150_s1  8s  ok
+[52/60] urbanradius/urban_jam-reactive_m2_r150_s2  8s  ok
+[53/60] urbanradius/urban_jam-reactive_m2_r150_s3  8s  ok
+[54/60] urbanradius/urban_jam-reactive_m2_r150_s4  8s  ok
+[55/60] urbanradius/urban_jam-reactive_m3_r150_s1  7s  ok
+[56/60] urbanradius/urban_jam-reactive_m2_r150_s5  10s  ok
+[57/60] urbanradius/urban_jam-reactive_m3_r150_s2  2223s  ok
+[58/60] urbanradius/urban_jam-reactive_m3_r150_s3  2228s  ok
+[59/60] urbanradius/urban_jam-reactive_m3_r150_s4  13359s  ok
+[60/60] urbanradius/urban_jam-reactive_m3_r150_s5  13362s  ok
+finished in 263.4 min, 0 failed
+24 runs in preset(s) ['edgerelay'], 0 already done, 24 to run
+[1/24] edgerelay/highway_jam-constant_m2_rsu0_edge1_s1  39s  ok
+[2/24] edgerelay/highway_jam-constant_m2_rsu0_edge1_s2  40s  ok
+[3/24] edgerelay/highway_jam-constant_m3_rsu0_edge1_s1  14s  ok
+[4/24] edgerelay/highway_jam-constant_m2_rsu0_edge1_s3  25s  ok
+[5/24] edgerelay/highway_jam-constant_m3_rsu0_edge1_s2  17s  ok
+[6/24] edgerelay/highway_jam-constant_m3_rsu0_edge1_s3  12s  ok
+[7/24] edgerelay/highway_jam-constant_m2_rsu1_edge1_s1  23s  ok
+[8/24] edgerelay/highway_jam-constant_m2_rsu1_edge1_s2  23s  ok
+[9/24] edgerelay/highway_jam-constant_m3_rsu1_edge1_s1  12s  ok
+[10/24] edgerelay/highway_jam-constant_m2_rsu1_edge1_s3  24s  ok
+[11/24] edgerelay/highway_jam-constant_m3_rsu1_edge1_s2  15s  ok
+[12/24] edgerelay/local_jam-constant_m2_rsu0_edge1_s1  4s  ok
+[13/24] edgerelay/local_jam-constant_m2_rsu0_edge1_s2  2s  ok
+[14/24] edgerelay/local_jam-constant_m2_rsu0_edge1_s3  1s  ok
+[15/24] edgerelay/local_jam-constant_m3_rsu0_edge1_s1  1s  ok
+[16/24] edgerelay/local_jam-constant_m3_rsu0_edge1_s2  1s  ok
+[17/24] edgerelay/local_jam-constant_m3_rsu0_edge1_s3  1s  ok
+[18/24] edgerelay/local_jam-constant_m2_rsu1_edge1_s1  2s  ok
+[19/24] edgerelay/highway_jam-constant_m3_rsu1_edge1_s3  20s  ok
+[20/24] edgerelay/local_jam-constant_m2_rsu1_edge1_s2  2s  ok
+[21/24] edgerelay/local_jam-constant_m2_rsu1_edge1_s3  2s  ok
+[22/24] edgerelay/local_jam-constant_m3_rsu1_edge1_s1  1s  ok
+[23/24] edgerelay/local_jam-constant_m3_rsu1_edge1_s2  1s  ok
+[24/24] edgerelay/local_jam-constant_m3_rsu1_edge1_s3  1s  ok
+finished in 2.4 min, 0 failed
+== finished Wed Nov 25 21:37:59 EST 2026 ==

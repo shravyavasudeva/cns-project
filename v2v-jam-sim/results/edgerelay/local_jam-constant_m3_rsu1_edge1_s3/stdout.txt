@@ -1,0 +1,3 @@
+v2v-jam: scenario=local jammer=constant confounder=none mitigation=3 vehicles=12 seed=3 -> /home/shrav/cns-project/v2v-jam-sim/results/edgerelay/local_jam-constant_m3_rsu1_edge1_s3
+  802.11p channel 178: 5890 MHz, 10 MHz wide
+  done: 28 alerts generated

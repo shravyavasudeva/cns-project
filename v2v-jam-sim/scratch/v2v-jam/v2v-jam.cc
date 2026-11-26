@@ -231,6 +231,12 @@ main(int argc, char* argv[])
     cmd.AddValue("maxSwitches", "max path switches per alert", p.maxSwitches);
     cmd.AddValue("backhaulMs", "RSU backhaul latency (ms)", p.backhaulMs);
     cmd.AddValue("relayMinRssi", "minimum RSSI for a relay (dBm)", p.relayMinRssi);
+    cmd.AddValue("relayEdge",
+                 "1 = allow jammed relay vehicles that are nearer the jammed-zone edge",
+                 p.relayEdge);
+    cmd.AddValue("relayEdgeMargin",
+                 "edge relay must be this much farther from the jam centre than the source (m)",
+                 p.relayEdgeMargin);
     cmd.AddValue("beaconHzJam", "beacon rate while jammed, mitigation 3 (Hz)", p.beaconHzJam);
     cmd.AddValue("serviceMs", "L4 queue service tick (ms)", p.serviceMs);
     // outputs

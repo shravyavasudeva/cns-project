@@ -7,6 +7,8 @@
  *                                               forwards over the wired backhaul to the
  *                                               other RSUs near the alert area
  *   2. otherwise the best relay vehicle       -> relay re-broadcasts once
+ *      (vehicles that are themselves jammed are skipped, unless --relayEdge=1 and they
+ *       are at least relayEdgeMargin farther from the estimated jam centre than us)
  *   3. otherwise                              -> NO_RELAY (expected on sparse roads)
  *
  * Relay score (all terms normalised to 0..1):

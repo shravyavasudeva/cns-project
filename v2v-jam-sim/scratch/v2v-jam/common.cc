@@ -164,6 +164,8 @@ ParamsToJson(const Params& p)
       << "  \"beaconHz\": " << p.beaconHz << ",\n"
       << "  \"beaconBytes\": " << p.beaconBytes << ",\n"
       << "  \"beaconHzJam\": " << p.beaconHzJam << ",\n"
+      << "  \"relayEdge\": " << p.relayEdge << ",\n"
+      << "  \"relayEdgeMargin\": " << p.relayEdgeMargin << ",\n"
       << "  \"alertStart\": " << p.alertStart << ",\n"
       << "  \"alertInterval\": " << p.alertInterval << ",\n"
       << "  \"alertRadius\": " << p.alertRadius << ",\n"

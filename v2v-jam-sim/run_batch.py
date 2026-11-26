@@ -16,6 +16,8 @@ Presets:
     confounders  congestion / weak channel / interference, no jammer   (36 runs)
     rsu          with vs without RSUs, constant jammer                 (24 runs)
     beaconrate   L4 beacon rate while jammed (2/5/10 Hz), constant jammer (27 runs)
+    urbanradius  urban main grid with a 150 m alert target radius        (60 runs)
+    edgerelay    'rsu' grid with --relayEdge=1 (jammed edge relays allowed) (24 runs)
     all          everything above except smoke
 
 Each run writes into  <out>/<preset>/<run-name>/ . Finished runs (node_summary.csv exists)
@@ -73,14 +75,24 @@ def preset_runs(name):
         # Does L4's beacon slow-down (default 2 Hz while jammed) starve the detector?
         return grid(scenario=SCENARIOS, jammer=["constant"], mitigation=[3],
                     beaconHzJam=[2, 5, 10], seed=[1, 2, 3])
+    if name == "urbanradius":
+        # Urban reaches only ~0.70 without a jammer at the default 200 m target radius.
+        # Same grid as main/urban with a 150 m radius, to compare against a ~1.0 baseline.
+        return grid(scenario=["urban"], jammer=["none", "constant", "reactive"],
+                    mitigation=MITIGATIONS, alertRadius=[150], seed=[1, 2, 3, 4, 5])
+    if name == "edgerelay":
+        # Same grid as 'rsu', but jammed vehicles nearer the zone edge may act as relays.
+        return grid(scenario=["highway", "local"], rsu=[0, 1], jammer=["constant"],
+                    mitigation=[2, 3], relayEdge=[1], seed=[1, 2, 3])
     raise SystemExit(f"unknown preset {name}")
 
 
 def run_name(flags):
     order = ["scenario", "jammer", "confounder", "mitigation", "vehicles", "rsu", "jamPower",
-             "beaconHzJam", "seed"]
+             "beaconHzJam", "alertRadius", "relayEdge", "seed"]
     short = {"scenario": "", "jammer": "jam-", "confounder": "conf-", "mitigation": "m",
-             "vehicles": "n", "rsu": "rsu", "jamPower": "p", "beaconHzJam": "bj", "seed": "s"}
+             "vehicles": "n", "rsu": "rsu", "jamPower": "p", "beaconHzJam": "bj",
+             "alertRadius": "r", "relayEdge": "edge", "seed": "s"}
     parts = [f"{short[k]}{flags[k]}" for k in order if k in flags]
     return "_".join(parts)
 
@@ -113,7 +125,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ns3", required=True, help="path to the ns-3.47 folder (contains ./ns3)")
     ap.add_argument("--preset", default="smoke",
-                    choices=["smoke", "sanity", "main", "density", "confounders", "rsu", "beaconrate", "all"])
+                    choices=["smoke", "sanity", "main", "density", "confounders", "rsu", "beaconrate",
+                             "urbanradius", "edgerelay", "all"])
     ap.add_argument("--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2),
                     help="runs in parallel (default: half your CPU cores)")
     ap.add_argument("--out", default=os.path.join(HERE, "results"), help="results folder")
@@ -123,7 +136,8 @@ def main():
     args = ap.parse_args()
 
     ns3_dir = os.path.abspath(os.path.expanduser(args.ns3))
-    presets = ["sanity", "main", "density", "confounders", "rsu", "beaconrate"] if args.preset == "all" else [args.preset]
+    presets = ["sanity", "main", "density", "confounders", "rsu", "beaconrate", "urbanradius",
+               "edgerelay"] if args.preset == "all" else [args.preset]
 
     jobs = []
     for pr in presets:

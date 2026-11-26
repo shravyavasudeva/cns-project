@@ -138,6 +138,8 @@ struct Params
     uint32_t maxSwitches = 3;   // max path switches per alert
     double backhaulMs = 2;      // RSU-to-RSU wired backhaul latency
     double relayMinRssi = -88;  // dBm, minimum link quality to use a neighbour as relay
+    int relayEdge = 0;          // 1: a jammed neighbour may relay if it is nearer the zone edge
+    double relayEdgeMargin = 50; // m, how much farther from the jam centre than us it must be
 
     // --- Layer 4 ---
     double beaconHzJam = 2;     // beacon rate while jamming is suspected (mitigation 3)

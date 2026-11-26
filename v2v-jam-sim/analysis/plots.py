@@ -215,6 +215,53 @@ def beacon_rate(df, out):
     save(fig, out, "beacon_rate.png")
 
 
+def urban_radius(df, out):
+    """Urban with the default 200 m target radius (main) vs 150 m (urbanradius preset)."""
+    u = df[((df.preset == "main") & (df.scenario == "urban")) | (df.preset == "urbanradius")]
+    if (u.preset == "urbanradius").sum() == 0:
+        return
+    u = u.assign(radius=np.where(u.preset == "urbanradius", "150 m", "200 m (default)"))
+    jams = [j for j in JAM_ORDER if j in set(u.jammer)]
+    fig, axes = plt.subplots(1, len(jams), figsize=(4.2 * len(jams), 3.6), sharey=True)
+    axes = np.atleast_1d(axes)
+    for ax, jam in zip(axes, jams):
+        grouped_bars(ax, u[u.jammer == jam], "ontime_ratio", ["200 m (default)", "150 m"], "radius")
+        ax.set_title(f"urban, jammer: {jam}")
+        ax.set_xlabel("alert target radius")
+        ax.set_ylim(0, 1.05)
+    axes[0].set_ylabel("on-time reachability")
+    axes[-1].legend(loc="upper left", bbox_to_anchor=(1.0, 1.0))
+    save(fig, out, "urban_radius.png")
+
+
+def edge_relay(df, out):
+    """rsu preset (jammed vehicles never relay) vs edgerelay preset (jammed edge relays allowed)."""
+    e = df[df.preset.isin(["rsu", "edgerelay"])]
+    if (e.preset == "edgerelay").sum() == 0:
+        return
+    rsu_lab = np.where(e.rsu == 1, "RSU", "no RSU")
+    edge_lab = np.where(e.preset == "edgerelay", "\n+ edge relays", "")
+    e = e.assign(config=[a + b for a, b in zip(rsu_lab, edge_lab)])
+    xs = ["no RSU", "no RSU\n+ edge relays", "RSU", "RSU\n+ edge relays"]
+    scens = [s for s in SCEN_ORDER if s in set(e.scenario)]
+    panels = [("ontime_ratio", "on-time reachability", (0, 1.05)),
+              ("no_relay_rate", "NO_RELAY rate (no path found)", (0, 1.05))]
+    fig, axes = plt.subplots(len(panels), len(scens), figsize=(4.8 * len(scens), 3.4 * len(panels)),
+                             sharey="row", squeeze=False)
+    for r, (metric, ylabel, ylim) in enumerate(panels):
+        for c, sc in enumerate(scens):
+            ax = axes[r][c]
+            grouped_bars(ax, e[e.scenario == sc], metric, xs, "config")
+            ax.set_ylim(*ylim)
+            if r == 0:
+                ax.set_title(f"{sc} (constant jammer)")
+            if c == 0:
+                ax.set_ylabel(ylabel)
+            ax.tick_params(axis="x", labelsize=8)
+    axes[0][-1].legend(loc="upper left", bbox_to_anchor=(1.0, 1.0))
+    save(fig, out, "edge_relay.png")
+
+
 def detector(df, out):
     d = df[df.preset.isin(["confounders", "main"]) & (df.mitigation == 0)]
     if d.empty:
@@ -265,6 +312,8 @@ def main():
     density(df, out)
     rsu_effect(df, out)
     beacon_rate(df, out)
+    urban_radius(df, out)
+    edge_relay(df, out)
     detector(df, out)
 
 
